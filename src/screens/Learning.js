@@ -112,7 +112,7 @@ export default ({
             <ToolBar
               button={
                 <LanguageSwitcher
-                  firstLanguage={LANGUAGE_NAMES.MG}
+                  firstLanguage={LANGUAGE_NAMES.EN}
                   LeftText="EN"
                   RightText="MA"
                   color="#FFFFFF"

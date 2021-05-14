@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {TouchableHighlight, StyleSheet, Text, View} from 'react-native';
-import {Icon} from 'react-native-elements';
+import { TouchableHighlight, StyleSheet, Text, View } from 'react-native';
+import { Icon } from 'react-native-elements';
 
 export default function LanguageSwitcher({
   onPress,
@@ -19,18 +19,18 @@ export default function LanguageSwitcher({
       underlayColor={firstLanguage ? '#001F7E' : '#007E3A'}
       onPress={onPress}>
       <View style={styles.button}>
-        <Text style={(styles.text, {color: color})}>
-          {firstLanguage ? RightText : LeftText}
+        <Text style={(styles.text, { color: color })}>
+          {firstLanguage ? LeftText : RightText}
         </Text>
         <Icon
-          style={{paddingHorizontal: 5}}
+          style={{ paddingHorizontal: 5 }}
           name={iconName}
           color={color}
           type={iconType}
           size={iconSize}
         />
-        <Text style={(styles.text, {color: color})}>
-          {firstLanguage ? LeftText : RightText}
+        <Text style={(styles.text, { color: color })}>
+          {firstLanguage ? RightText : LeftText}
         </Text>
       </View>
     </TouchableHighlight>
@@ -38,7 +38,7 @@ export default function LanguageSwitcher({
 }
 
 LanguageSwitcher.defaultProps = {
-  onPress: () => {},
+  onPress: () => { },
 };
 
 LanguageSwitcher.propTypes = {
