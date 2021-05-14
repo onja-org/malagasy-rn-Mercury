@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import {action} from '@storybook/addon-actions';
+import React, { useState, useEffect, useCallback } from 'react';
+import { action } from '@storybook/addon-actions';
 import {
   Text,
   View,
@@ -17,8 +17,8 @@ import LanguageSwitcher from '../components/LanguageSwitcher/LanguageSwitcher';
 import BackIcon from '../components/ToolButton/assets/back.svg';
 import ModeIcon from '../components/ToolButton/assets/mode.svg';
 
-import {LANGUAGE_NAMES} from '../data/dataUtils';
-import {shuffleArray} from '../utils';
+import { LANGUAGE_NAMES } from '../data/dataUtils';
+import { shuffleArray } from '../utils';
 
 export default ({
   //nav provider
@@ -57,7 +57,7 @@ export default ({
       setDisableAllOptions(true);
 
       const answerOptionsWithSelected = answerOptions.map(phrase => {
-        return {...phrase, isSelected: phrase.id === item.id};
+        return { ...phrase, isSelected: phrase.id === item.id };
       });
 
       setAnswerOptions(answerOptionsWithSelected);
@@ -95,9 +95,9 @@ export default ({
   };
 
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
-        <View style={{paddingHorizontal: 35, paddingVertical: 23}}>
+    <SafeAreaView style={{ flex: 1 }}>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+        <View style={{ paddingHorizontal: 35, paddingVertical: 23 }}>
           <View style={styles.header}>
             <ToolBar
               button={
@@ -112,7 +112,7 @@ export default ({
             <ToolBar
               button={
                 <LanguageSwitcher
-                  firstLanguage={LANGUAGE_NAMES.EN}
+                  firstLanguage={LANGUAGE_NAMES.MG}
                   LeftText="EN"
                   RightText="MA"
                   color="#FFFFFF"
@@ -138,13 +138,13 @@ export default ({
           <View style={styles.heading}>
             <SectionHeading text="The phrase: " />
           </View>
-          <View style={{marginBottom: 37}}>
+          <View style={{ marginBottom: 37 }}>
             <Textarea
               editable={false}
               phrase={
                 shouldReshuffle
                   ? 'You have answered all the questions in this category'
-                  : currentPhrase?.name?.[LANGUAGE_NAMES.EN]
+                  : currentPhrase?.name?.[LANGUAGE_NAMES.MG]
               }
             />
           </View>
@@ -154,7 +154,7 @@ export default ({
                 <SectionHeading text="Pick a solution: " />
               </View>
               <List
-                lang={LANGUAGE_NAMES.MG}
+                lang={LANGUAGE_NAMES.EN}
                 data={answerOptions}
                 text="Pick"
                 color="#06B6D4"
@@ -168,7 +168,7 @@ export default ({
           )}
 
           {disableAllOptions && !shouldReshuffle && (
-            <View style={{marginTop: 45}}>
+            <View style={{ marginTop: 45 }}>
               <NextButton
                 isDisabled={false}
                 textColor="#FFFFFF"
@@ -178,7 +178,7 @@ export default ({
             </View>
           )}
           {shouldReshuffle && (
-            <View style={{marginTop: 45}}>
+            <View style={{ marginTop: 45 }}>
               <NextButton
                 isDisabled={false}
                 textColor="#FFFFFF"
