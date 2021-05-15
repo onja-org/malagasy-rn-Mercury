@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { action } from '@storybook/addon-actions';
+import React, {useEffect} from 'react';
+import {action} from '@storybook/addon-actions';
 import {
   LANGUAGE_NAMES,
   getPhrasesForCategoryId,
@@ -49,14 +49,18 @@ export default ({
     navigation.navigate('Learn');
   };
 
+  const openAddingScreen = () => {
+    navigation.navigate('Add');
+  };
+
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
-        <View style={{ paddingHorizontal: 35, paddingVertical: 23 }}>
+    <SafeAreaView style={{flex: 1}}>
+      <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
+        <View style={{paddingHorizontal: 35, paddingVertical: 23}}>
           <View style={styles.header}>
             <ToolBar
               button={
-                <ToolButton onPress={action('clicked-add-button')}>
+                <ToolButton onPress={openAddingScreen}>
                   <AddIcon width={24} height={24} fill="#FFFFFF" />
                 </ToolButton>
               }
@@ -113,23 +117,23 @@ export default ({
             <SectionHeading text="Seen phrases:" />
           </View>
           <List
-            data={[{ id: 1, name: '35 words and phrases' }]}
+            data={[{id: 1, name: '35 words and phrases'}]}
             text={'Learn'}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"
-            makeAction={() => { }}
+            makeAction={() => {}}
           />
           <View style={styles.heading}>
             <SectionHeading text="Learnt phrases:" />
           </View>
           <List
-            data={[{ id: 2, name: '10 words and phrases' }]}
+            data={[{id: 2, name: '10 words and phrases'}]}
             text={'Learn'}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"
-            makeAction={() => { }}
+            makeAction={() => {}}
           />
         </View>
       </KeyboardAvoidingView>
