@@ -34,18 +34,29 @@ export default ({
   setCategories,
   setCurrentCategory,
   setPhrases,
+  newPhrases,
+  synchronizeStorageToRedux
 }) => {
   useEffect(() => {
     // fetch categories
+    synchronizeStorageToRedux();
     const categories = getAllCategories();
     setCategories(categories);
   }, []);
 
   const openCategoryPhrases = item => {
-    setCurrentCategory(item.id);
+    const categoryId = item.id;
+    setCurrentCategory(categoryId);
     // fetch Phrases for category
-    const phrasesForCategory = getPhrasesForCategoryId(item.id);
-    setPhrases(phrasesForCategory);
+    const phrasesForCategory = getPhrasesForCategoryId(categoryId);
+    const userPhrasesForCategory = newPhrases.filter(
+      phrase => phrase.catId === categoryId,
+    );
+    const combinedPhrasesForCategory = [
+      ...phrasesForCategory,
+      ...userPhrasesForCategory,
+    ];
+    setPhrases(combinedPhrasesForCategory);
     navigation.navigate('Learn');
   };
 

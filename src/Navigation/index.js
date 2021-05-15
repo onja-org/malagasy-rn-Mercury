@@ -4,7 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import HomeScreen from '../containers/HomeScreenContainer';
 const Stack = createStackNavigator();
 import Learning from '../containers/LearningScreenContainer';
-import Adding from '../containers/AddingScreenContainer';
+import Adding from '../containers/AddNewTermScreenContainer';
 
 // a stack for screen navigator
 const HomeStack = () => {
