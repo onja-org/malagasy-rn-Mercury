@@ -24,8 +24,16 @@ export default ({
   //nav provider
   navigation,
 
+  //state props
+  categories,
+  learntPhrases,
+  addLearntPhrase,
   categoryPhrases,
   currentCategoryName,
+  learntPhrasesCategory,
+
+  // action
+  setLearntPhrasesCategory,
 }) => {
   const [originalPhrases, setOriginalPhrases] = useState([]);
   const [phrasesLeft, setPhrasesLeft] = useState([]);
@@ -34,10 +42,22 @@ export default ({
   const [disableAllOptions, setDisableAllOptions] = useState(false);
   const [shouldReshuffle, setshouldReshuffle] = useState(false);
 
+  const findLearntCategory = categories.find(cat =>
+    cat.phrasesIds.includes(currentPhrase?.id),
+  );
+
   useEffect(() => {
     setOriginalPhrases(categoryPhrases);
     setNewQuestionPhrase(categoryPhrases, categoryPhrases);
   }, [categoryPhrases]);
+
+  useEffect(() => {
+    setLearntPhrasesCategory(
+      findLearntCategory
+        ? findLearntCategory?.name[LANGUAGE_NAMES.EN]
+        : 'Learnt phrase',
+    );
+  }, [findLearntCategory]);
 
   const setAnswerOptionsCallback = (original, current) => {
     const originWithoutCurrent = original.filter(phr => phr.id !== current.id);
@@ -48,8 +68,11 @@ export default ({
 
   const selectAnswerCallback = useCallback(
     item => {
-      if (item.id === currentPhrase.id) {
-        // TODO add to learned
+      if (
+        item.id === currentPhrase.id &&
+        learntPhrases.every(phrase => phrase.id !== currentPhrase.id)
+      ) {
+        addLearntPhrase(item);
       } else {
         // TODO add to seen
       }
@@ -59,11 +82,11 @@ export default ({
       const answerOptionsWithSelected = answerOptions.map(phrase => {
         return {...phrase, isSelected: phrase.id === item.id};
       });
-
       setAnswerOptions(answerOptionsWithSelected);
     },
     [currentPhrase, setDisableAllOptions, answerOptions],
   );
+
   const nextAnswerCallback = useCallback(() => {
     if (!Boolean(phrasesLeft.length)) {
       setshouldReshuffle(true);
@@ -90,7 +113,6 @@ export default ({
     const newPhrase = phrasesLeftCopy.shift();
     setPhrasesLeft(phrasesLeftCopy);
     setCurrentPhrase(newPhrase);
-
     setAnswerOptionsCallback(originalAll, newPhrase);
   };
 
@@ -133,7 +155,12 @@ export default ({
           </View>
           <View style={styles.heading}>
             <SectionHeading text="Category: " />
-            <Text>{currentCategoryName}</Text>
+            <Text>
+              {currentCategoryName
+                ? currentCategoryName
+                : learntPhrasesCategory &&
+                  `Learnt phrases/${learntPhrasesCategory}`}
+            </Text>
           </View>
           <View style={styles.heading}>
             <SectionHeading text="The phrase: " />
@@ -155,7 +182,7 @@ export default ({
               </View>
               <List
                 lang={LANGUAGE_NAMES.MG}
-                data={answerOptions}
+                data={answerOptions && answerOptions}
                 text="Pick"
                 color="#06B6D4"
                 iconType="material-community"
