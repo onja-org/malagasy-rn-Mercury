@@ -19,13 +19,15 @@ import ModeIcon from '../components/ToolButton/assets/mode.svg';
 
 import {LANGUAGE_NAMES} from '../data/dataUtils';
 import {shuffleArray} from '../utils';
-
+import AsyncStorage from '@react-native-community/async-storage';
+import {storeLearntPhrases} from './Home';
 export default ({
   //nav provider
   navigation,
 
   categoryPhrases,
   currentCategoryName,
+  setLearntPhrases,
 }) => {
   const [originalPhrases, setOriginalPhrases] = useState([]);
   const [phrasesLeft, setPhrasesLeft] = useState([]);
@@ -33,6 +35,7 @@ export default ({
   const [answerOptions, setAnswerOptions] = useState([]);
   const [disableAllOptions, setDisableAllOptions] = useState(false);
   const [shouldReshuffle, setshouldReshuffle] = useState(false);
+  const [learntPhrasesList, setLearntPhrasesList] = useState([]);
 
   useEffect(() => {
     setOriginalPhrases(categoryPhrases);
@@ -50,6 +53,9 @@ export default ({
     item => {
       if (item.id === currentPhrase.id) {
         // TODO add to learned
+        learntPhrasesList.push(currentPhrase);
+        const allPhrases = [...learntPhrasesList];
+        setLearntPhrases(allPhrases);
       } else {
         // TODO add to seen
       }
@@ -59,11 +65,11 @@ export default ({
       const answerOptionsWithSelected = answerOptions.map(phrase => {
         return {...phrase, isSelected: phrase.id === item.id};
       });
-
       setAnswerOptions(answerOptionsWithSelected);
     },
     [currentPhrase, setDisableAllOptions, answerOptions],
   );
+
   const nextAnswerCallback = useCallback(() => {
     if (!Boolean(phrasesLeft.length)) {
       setshouldReshuffle(true);
@@ -90,7 +96,6 @@ export default ({
     const newPhrase = phrasesLeftCopy.shift();
     setPhrasesLeft(phrasesLeftCopy);
     setCurrentPhrase(newPhrase);
-
     setAnswerOptionsCallback(originalAll, newPhrase);
   };
 
@@ -155,7 +160,7 @@ export default ({
               </View>
               <List
                 lang={LANGUAGE_NAMES.MG}
-                data={answerOptions}
+                data={answerOptions && answerOptions}
                 text="Pick"
                 color="#06B6D4"
                 iconType="material-community"

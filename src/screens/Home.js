@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {action} from '@storybook/addon-actions';
 import {
   LANGUAGE_NAMES,
@@ -23,22 +23,55 @@ import AddIcon from '../components/ToolButton/assets/add.svg';
 import CheckIcon from '../components/ToolButton/assets/check.svg';
 import CheckAllIcon from '../components/ToolButton/assets/check-all.svg';
 import ModeIcon from '../components/ToolButton/assets/mode.svg';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default ({
   //nav provider
   navigation,
   //state props
+  learntPhrases,
   categories,
   nativeLanguage,
   //actions
+  setLearntPhrases,
   setCategories,
   setCurrentCategory,
   setPhrases,
 }) => {
+  const [learntPhrasesList, setLearntPhrasesList] = useState([]);
+  const storeLearntPhrases = async phrases => {
+    const phrasesData = JSON.stringify(phrases);
+    try {
+      await AsyncStorage.setItem('@learntPhrases', phrasesData);
+    } catch (e) {
+      console.log(e);
+    }
+    console.log(phrases, 'PHRASES');
+  };
+
+  const getLearntPhrases = async () => {
+    try {
+      const storedPhrases = await AsyncStorage.getItem('@learntPhrases');
+      const data = storedPhrases !== null ? JSON.parse(storedPhrases) : null;
+      if (data !== null) {
+        const removedDuplicates = [...new Set(data)];
+        setLearntPhrases(removedDuplicates);
+        console.log(removedDuplicates, 'DUPLICATED');
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   useEffect(() => {
     // fetch categories
     const categories = getAllCategories();
     setCategories(categories);
+    getLearntPhrases();
+  }, []);
+
+  useEffect(() => {
+    storeLearntPhrases(learntPhrases);
   }, []);
 
   const openCategoryPhrases = item => {
@@ -46,6 +79,13 @@ export default ({
     // fetch Phrases for category
     const phrasesForCategory = getPhrasesForCategoryId(item.id);
     setPhrases(phrasesForCategory);
+    navigation.navigate('Learn');
+  };
+
+  const openLearntPhrases = item => {
+    setCurrentCategory(item.id);
+    // Using the learntPhrases in the state
+    setPhrases(learntPhrases);
     navigation.navigate('Learn');
   };
 
@@ -124,12 +164,20 @@ export default ({
             <SectionHeading text="Learnt phrases:" />
           </View>
           <List
-            data={[{id: 2, name: '10 words and phrases'}]}
+            data={[
+              {
+                id: 2,
+                name:
+                  learntPhrases.length !== 0
+                    ? `${learntPhrases.length} words and phrases`
+                    : 'No word and phrase',
+              },
+            ]}
             text={'Learn'}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"
-            makeAction={() => {}}
+            makeAction={openLearntPhrases}
           />
         </View>
       </KeyboardAvoidingView>
