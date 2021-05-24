@@ -4,7 +4,6 @@ import {View, StyleSheet, SafeAreaView} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import 'react-native-get-random-values';
 import {v4 as uuid} from 'uuid';
-// import AsyncStorage from '@react-native-community/async-storage';
 
 import SectionHeading from '../components/SectionHeading/SectionHeading';
 import ToolBar from '../components/ToolBar/ToolBar';
@@ -15,8 +14,7 @@ import LanguageSwitcher from '../components/LanguageSwitcher/LanguageSwitcher';
 import BackIcon from '../components/ToolButton/assets/back.svg';
 import ModeIcon from '../components/ToolButton/assets/mode.svg';
 
-import {LANGUAGE_NAMES, getAllPhrases} from '../data/dataUtils';
-// import {generateId} from '../utils';
+import {LANGUAGE_NAMES} from '../data/dataUtils';
 
 export default ({navigation, categories, addNewPhrase}) => {
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -152,10 +150,6 @@ const styles = StyleSheet.create({
   heading: {
     paddingBottom: 15,
     flexDirection: 'row',
-  },
-  debugList: {
-    flexDirection: 'row',
-    width: 250,
   },
   pickerContainer: {
     marginTop: -16,
