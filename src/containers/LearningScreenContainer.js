@@ -8,7 +8,6 @@ import {
 import {categoryPhrasesRoot, currentCategoryName} from '../redux/selectors';
 
 function mapStateToProps(state) {
-  console.log(state);
   return {
     categoryPhrases: categoryPhrasesRoot(state),
     currentCategoryName: currentCategoryName(state),

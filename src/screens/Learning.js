@@ -24,12 +24,15 @@ export default ({
   //nav provider
   navigation,
 
+  //state props
   categories,
   learntPhrases,
   addLearntPhrase,
   categoryPhrases,
   currentCategoryName,
   learntPhrasesCategory,
+
+  // action
   setLearntPhrasesCategory,
 }) => {
   const [originalPhrases, setOriginalPhrases] = useState([]);
@@ -54,13 +57,7 @@ export default ({
         ? findLearntCategory?.name[LANGUAGE_NAMES.EN]
         : 'Learnt phrase',
     );
-  }, []);
-
-  console.log(
-    learntPhrasesCategory,
-    // findLearntCategory,
-    findLearntCategory?.name[LANGUAGE_NAMES.EN],
-  );
+  }, [findLearntCategory]);
 
   const setAnswerOptionsCallback = (original, current) => {
     const originWithoutCurrent = original.filter(phr => phr.id !== current.id);

@@ -22,20 +22,21 @@ import AddIcon from '../components/ToolButton/assets/add.svg';
 import CheckIcon from '../components/ToolButton/assets/check.svg';
 import CheckAllIcon from '../components/ToolButton/assets/check-all.svg';
 import ModeIcon from '../components/ToolButton/assets/mode.svg';
-import {currentCategoryPhrasesIds} from '../redux/selectors';
 
 export default ({
   //nav provider
   navigation,
+
   //state props
-  learntPhrases,
   categories,
+  learntPhrases,
   nativeLanguage,
+
   //actions
-  setCategories,
-  setCurrentCategory,
   setPhrases,
+  setCategories,
   addLearntPhrase,
+  setCurrentCategory,
 }) => {
   useEffect(() => {
     // fetch categories
@@ -55,11 +56,23 @@ export default ({
     navigation.navigate('Learn');
   };
 
-  const openLearntPhrases = () => {
+  const openLearntPhrases = item => {
     // Using the learntPhrases in the state
+    setCurrentCategory(item.id);
     setPhrases(learntPhrases);
     navigation.navigate('Learn');
   };
+
+  // Changing the label of the learnt phrases
+  let wordAndPhrase = '';
+
+  if (learntPhrases.length > 1) {
+    wordAndPhrase = `${learntPhrases.length} words and phrases`;
+  } else if (learntPhrases.length === 1) {
+    wordAndPhrase = `${learntPhrases.length} word and phrase`;
+  } else {
+    wordAndPhrase = 'No word and phrase';
+  }
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -136,19 +149,12 @@ export default ({
             <SectionHeading text="Learnt phrases:" />
           </View>
           <List
-            data={[
-              {
-                id: 2,
-                name:
-                  learntPhrases.length !== 0
-                    ? `${learntPhrases.length} words and phrases`
-                    : 'No word and phrase',
-              },
-            ]}
+            data={[{id: 2, name: wordAndPhrase}]}
             text={'Learn'}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"
+            disableAllOptions={learntPhrases.length === 0 && true}
             makeAction={openLearntPhrases}
           />
         </View>

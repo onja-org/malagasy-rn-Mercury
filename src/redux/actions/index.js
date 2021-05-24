@@ -8,7 +8,7 @@ import {
   SET_LEARNT_PHRASES_CATEGORY,
 } from '../constants';
 
-import {storeData, LEARNT_PHRASES_KEY, getData} from '../../utils/localStorage';
+import {storeData, LEARNT_PHRASES_KEY, getData} from '../../utils/storage';
 
 // categories actions
 export function setCategories(categories) {
