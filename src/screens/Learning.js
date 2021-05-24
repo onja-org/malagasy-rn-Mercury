@@ -19,15 +19,18 @@ import ModeIcon from '../components/ToolButton/assets/mode.svg';
 
 import {LANGUAGE_NAMES} from '../data/dataUtils';
 import {shuffleArray} from '../utils';
-import AsyncStorage from '@react-native-community/async-storage';
-import {storeLearntPhrases} from './Home';
+
 export default ({
   //nav provider
   navigation,
 
+  categories,
+  learntPhrases,
+  addLearntPhrase,
   categoryPhrases,
   currentCategoryName,
-  setLearntPhrases,
+  learntPhrasesCategory,
+  setLearntPhrasesCategory,
 }) => {
   const [originalPhrases, setOriginalPhrases] = useState([]);
   const [phrasesLeft, setPhrasesLeft] = useState([]);
@@ -35,12 +38,29 @@ export default ({
   const [answerOptions, setAnswerOptions] = useState([]);
   const [disableAllOptions, setDisableAllOptions] = useState(false);
   const [shouldReshuffle, setshouldReshuffle] = useState(false);
-  const [learntPhrasesList, setLearntPhrasesList] = useState([]);
+
+  const findLearntCategory = categories.find(cat =>
+    cat.phrasesIds.includes(currentPhrase?.id),
+  );
 
   useEffect(() => {
     setOriginalPhrases(categoryPhrases);
     setNewQuestionPhrase(categoryPhrases, categoryPhrases);
   }, [categoryPhrases]);
+
+  useEffect(() => {
+    setLearntPhrasesCategory(
+      findLearntCategory
+        ? findLearntCategory?.name[LANGUAGE_NAMES.EN]
+        : 'Learnt phrase',
+    );
+  }, []);
+
+  console.log(
+    learntPhrasesCategory,
+    // findLearntCategory,
+    findLearntCategory?.name[LANGUAGE_NAMES.EN],
+  );
 
   const setAnswerOptionsCallback = (original, current) => {
     const originWithoutCurrent = original.filter(phr => phr.id !== current.id);
@@ -51,11 +71,11 @@ export default ({
 
   const selectAnswerCallback = useCallback(
     item => {
-      if (item.id === currentPhrase.id) {
-        // TODO add to learned
-        learntPhrasesList.push(currentPhrase);
-        const allPhrases = [...learntPhrasesList];
-        setLearntPhrases(allPhrases);
+      if (
+        item.id === currentPhrase.id &&
+        learntPhrases.every(phrase => phrase.id !== currentPhrase.id)
+      ) {
+        addLearntPhrase(item);
       } else {
         // TODO add to seen
       }
@@ -138,7 +158,12 @@ export default ({
           </View>
           <View style={styles.heading}>
             <SectionHeading text="Category: " />
-            <Text>{currentCategoryName}</Text>
+            <Text>
+              {currentCategoryName
+                ? currentCategoryName
+                : learntPhrasesCategory &&
+                  `Learnt phrases/${learntPhrasesCategory}`}
+            </Text>
           </View>
           <View style={styles.heading}>
             <SectionHeading text="The phrase: " />

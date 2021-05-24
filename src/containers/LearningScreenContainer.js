@@ -1,6 +1,10 @@
 import {connect} from 'react-redux';
 import Learning from '../screens/Learning';
-import {setLearntPhrases} from '../redux/actions/index';
+import {
+  setLearntPhrases,
+  addLearntPhrase,
+  setLearntPhrasesCategory,
+} from '../redux/actions/index';
 import {categoryPhrasesRoot, currentCategoryName} from '../redux/selectors';
 
 function mapStateToProps(state) {
@@ -9,8 +13,14 @@ function mapStateToProps(state) {
     categoryPhrases: categoryPhrasesRoot(state),
     currentCategoryName: currentCategoryName(state),
     learntPhrases: state.learntPhrases,
+    categories: state.categories,
+    learntPhrasesCategory: state.learntPhrasesCategory,
   };
 }
-const mapDispatchToProps = {setLearntPhrases};
+const mapDispatchToProps = {
+  setLearntPhrases,
+  addLearntPhrase,
+  setLearntPhrasesCategory,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Learning);

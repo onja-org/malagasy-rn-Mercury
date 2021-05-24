@@ -26,7 +26,7 @@ export const currentCategoryPhrasesIds = createSelector(
 export const currentCategoryName = createSelector(
   [currentCategory, nativeLanguageRoot],
   (selectedCategory, language) => {
-    const name = selectedCategory?.name?.[language] || 'Learnt phrases';
+    const name = selectedCategory?.name?.[language];
     return name;
   },
 );

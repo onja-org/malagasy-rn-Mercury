@@ -16,14 +16,13 @@ import {
 import List from '../components/List/List';
 import SectionHeading from '../components/SectionHeading/SectionHeading';
 import ToolBar from '../components/ToolBar/ToolBar';
-
 import ToolButton from '../components/ToolButton/ToolButton';
 import LanguageSwitcher from '../components/LanguageSwitcher/LanguageSwitcher';
 import AddIcon from '../components/ToolButton/assets/add.svg';
 import CheckIcon from '../components/ToolButton/assets/check.svg';
 import CheckAllIcon from '../components/ToolButton/assets/check-all.svg';
 import ModeIcon from '../components/ToolButton/assets/mode.svg';
-import AsyncStorage from '@react-native-community/async-storage';
+import {currentCategoryPhrasesIds} from '../redux/selectors';
 
 export default ({
   //nav provider
@@ -33,45 +32,19 @@ export default ({
   categories,
   nativeLanguage,
   //actions
-  setLearntPhrases,
   setCategories,
   setCurrentCategory,
   setPhrases,
+  addLearntPhrase,
 }) => {
-  const [learntPhrasesList, setLearntPhrasesList] = useState([]);
-  const storeLearntPhrases = async phrases => {
-    const phrasesData = JSON.stringify(phrases);
-    try {
-      await AsyncStorage.setItem('@learntPhrases', phrasesData);
-    } catch (e) {
-      console.log(e);
-    }
-    console.log(phrases, 'PHRASES');
-  };
-
-  const getLearntPhrases = async () => {
-    try {
-      const storedPhrases = await AsyncStorage.getItem('@learntPhrases');
-      const data = storedPhrases !== null ? JSON.parse(storedPhrases) : null;
-      if (data !== null) {
-        const removedDuplicates = [...new Set(data)];
-        setLearntPhrases(removedDuplicates);
-        console.log(removedDuplicates, 'DUPLICATED');
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   useEffect(() => {
     // fetch categories
     const categories = getAllCategories();
     setCategories(categories);
-    getLearntPhrases();
   }, []);
 
   useEffect(() => {
-    storeLearntPhrases(learntPhrases);
+    addLearntPhrase(learntPhrases);
   }, []);
 
   const openCategoryPhrases = item => {
@@ -82,8 +55,7 @@ export default ({
     navigation.navigate('Learn');
   };
 
-  const openLearntPhrases = item => {
-    setCurrentCategory(item.id);
+  const openLearntPhrases = () => {
     // Using the learntPhrases in the state
     setPhrases(learntPhrases);
     navigation.navigate('Learn');

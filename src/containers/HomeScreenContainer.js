@@ -5,6 +5,7 @@ import {
   setCurrentCategory,
   setPhrases,
   setLearntPhrases,
+  addLearntPhrase,
 } from '../redux/actions';
 import {categoriesRoot, nativeLanguageRoot} from '../redux/selectors';
 
@@ -20,6 +21,7 @@ const mapDispatchToProps = {
   setCurrentCategory,
   setPhrases,
   setLearntPhrases,
+  addLearntPhrase,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
