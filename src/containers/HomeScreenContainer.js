@@ -7,13 +7,17 @@ import {
   setLearntPhrases,
   addLearntPhrase,
 } from '../redux/actions';
-import {categoriesRoot, nativeLanguageRoot} from '../redux/selectors';
+import {
+  categoriesRoot,
+  nativeLanguageRoot,
+  learntPhrasesRoot,
+} from '../redux/selectors';
 
 function mapStateToProps(state) {
   return {
     categories: categoriesRoot(state),
     nativeLanguage: nativeLanguageRoot(state),
-    learntPhrases: state.learntPhrases,
+    learntPhrases: learntPhrasesRoot(state),
   };
 }
 const mapDispatchToProps = {

@@ -5,15 +5,21 @@ import {
   addLearntPhrase,
   setLearntPhrasesCategory,
 } from '../redux/actions/index';
-import {categoryPhrasesRoot, currentCategoryName} from '../redux/selectors';
+import {
+  categoriesRoot,
+  categoryPhrasesRoot,
+  currentCategoryName,
+  learntPhrasesRoot,
+  learntPhrasesCategoryRoot,
+} from '../redux/selectors';
 
 function mapStateToProps(state) {
   return {
     categoryPhrases: categoryPhrasesRoot(state),
     currentCategoryName: currentCategoryName(state),
-    learntPhrases: state.learntPhrases,
-    categories: state.categories,
-    learntPhrasesCategory: state.learntPhrasesCategory,
+    learntPhrases: learntPhrasesRoot(state),
+    categories: categoriesRoot(state),
+    learntPhrasesCategory: learntPhrasesCategoryRoot(state),
   };
 }
 const mapDispatchToProps = {
