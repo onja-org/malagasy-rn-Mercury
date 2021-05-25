@@ -2,6 +2,7 @@ import {createSelector} from 'reselect';
 
 export const categoriesRoot = state => state.categories;
 export const nativeLanguageRoot = state => state.nativeLanguage;
+export const newPhrasesRoot = state => state.newPhrases;
 export const categoryPhrasesRoot = state => {
   return state.categoryPhrases;
 };
