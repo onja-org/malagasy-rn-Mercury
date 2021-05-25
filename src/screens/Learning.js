@@ -24,6 +24,10 @@ export default ({
   //nav provider
   navigation,
 
+  //state props
+  categories,
+  learntPhrases,
+  addLearntPhrases,
   categoryPhrases,
   currentCategoryName,
 }) => {
@@ -33,6 +37,11 @@ export default ({
   const [answerOptions, setAnswerOptions] = useState([]);
   const [disableAllOptions, setDisableAllOptions] = useState(false);
   const [shouldReshuffle, setshouldReshuffle] = useState(false);
+
+  // Finding the learnt phrases category
+  const learntCategory = categories.find(cat =>
+    cat.phrasesIds.includes(currentPhrase?.id),
+  );
 
   useEffect(() => {
     setOriginalPhrases(categoryPhrases);
@@ -48,8 +57,11 @@ export default ({
 
   const selectAnswerCallback = useCallback(
     item => {
-      if (item.id === currentPhrase.id) {
-        // TODO add to learned
+      if (
+        item.id === currentPhrase.id &&
+        learntPhrases.every(phrase => phrase.id !== currentPhrase.id)
+      ) {
+        addLearntPhrases(item);
       } else {
         // TODO add to seen
       }
@@ -59,11 +71,11 @@ export default ({
       const answerOptionsWithSelected = answerOptions.map(phrase => {
         return {...phrase, isSelected: phrase.id === item.id};
       });
-
       setAnswerOptions(answerOptionsWithSelected);
     },
     [currentPhrase, setDisableAllOptions, answerOptions],
   );
+
   const nextAnswerCallback = useCallback(() => {
     if (!Boolean(phrasesLeft.length)) {
       setshouldReshuffle(true);
@@ -90,7 +102,6 @@ export default ({
     const newPhrase = phrasesLeftCopy.shift();
     setPhrasesLeft(phrasesLeftCopy);
     setCurrentPhrase(newPhrase);
-
     setAnswerOptionsCallback(originalAll, newPhrase);
   };
 
@@ -133,7 +144,11 @@ export default ({
           </View>
           <View style={styles.heading}>
             <SectionHeading text="Category: " />
-            <Text>{currentCategoryName}</Text>
+            <Text>
+              {currentCategoryName
+                ? currentCategoryName
+                : `Learnt phrases/${learntCategory?.name[LANGUAGE_NAMES.EN]}`}
+            </Text>
           </View>
           <View style={styles.heading}>
             <SectionHeading text="The phrase: " />
