@@ -2,12 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {TouchableHighlight, StyleSheet, View} from 'react-native';
 
-export default function ToolButton({onPress, children}) {
+export default function ToolButton({onPress, children, disabled}) {
   return (
     <TouchableHighlight
       style={styles.container}
       underlayColor="#E5E5E5"
-      onPress={onPress}>
+      onPress={onPress}
+      disabled={disabled}>
       <View style={styles.button}>{children}</View>
     </TouchableHighlight>
   );

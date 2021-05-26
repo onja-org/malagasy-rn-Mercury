@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import Learning from '../screens/Learning';
-import {setLearntPhrases, addLearntPhrases} from '../redux/actions/index';
+import {addLearntPhrases} from '../redux/actions/index';
 import {
   categoriesRoot,
   categoryPhrasesRoot,
@@ -17,7 +17,6 @@ function mapStateToProps(state) {
   };
 }
 const mapDispatchToProps = {
-  setLearntPhrases,
   addLearntPhrases,
 };
 

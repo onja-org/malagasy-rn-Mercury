@@ -57,10 +57,12 @@ export default ({
 
   const selectAnswerCallback = useCallback(
     item => {
-      if (
-        item.id === currentPhrase.id &&
-        learntPhrases.every(phrase => phrase.id !== currentPhrase.id)
-      ) {
+      const isCorrect = item.id === currentPhrase.id;
+
+      const isAlredyinLearnPhrases = learntPhrases.every(
+        phrase => phrase.id !== currentPhrase.id,
+      );
+      if (isCorrect && isAlredyinLearnPhrases) {
         addLearntPhrases(item);
       } else {
         // TODO add to seen

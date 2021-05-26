@@ -92,7 +92,7 @@ export function synchronizeStorageToRedux() {
   return async dispatch => {
     const storedPhrases = await getData(NEW_PHRASES_KEY);
     const storedLearntPhrase = await getData(LEARNT_PHRASES_KEY);
-    if (!storedPhrases && !storedLearntPhrase) {
+    if (!storedPhrases || !storedLearntPhrase) {
       return Promise.resolve();
     }
     dispatch(setNewPhrases(storedPhrases));
