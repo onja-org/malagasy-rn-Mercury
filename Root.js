@@ -1,7 +1,7 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 // import Storybook from "./storybook";
-import App from './App';
+import App from "./App";
 
 const Root = () => {
   const [storybookActive, setStorybookActive] = useState(false);
@@ -18,7 +18,6 @@ const Root = () => {
     }
   }, [toggleStorybook]);
 
-  // return storybookActive ? <Storybook /> : <App />;
   return storybookActive ? <App /> : <App />;
 };
 

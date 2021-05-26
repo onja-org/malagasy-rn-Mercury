@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {action} from '@storybook/addon-actions';
 import {View, StyleSheet, SafeAreaView} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
@@ -13,23 +13,34 @@ import ToolButton from '../components/ToolButton/ToolButton';
 import LanguageSwitcher from '../components/LanguageSwitcher/LanguageSwitcher';
 import BackIcon from '../components/ToolButton/assets/back.svg';
 import ModeIcon from '../components/ToolButton/assets/mode.svg';
+import LanguageSwitcherContainerEnMg from '../containers/LanguageSwitcherContainerEnMg';
 
 import {LANGUAGE_NAMES} from '../data/dataUtils';
 
-export default ({navigation, categories, addNewPhrase}) => {
+import {
+  LANG_DATA,
+  CATEGORY_HEADING,
+  SELECT_CATEGORY,
+  ADD_SECTION_HAEDING_E_ENGLISH,
+  ADD_ENTER_INPUTFIELD,
+  ADD_SECTION_HAEDING_MALAGASY,
+  ADD_BUTTON,
+} from '../translations';
+
+export default ({navigation, categories, addNewPhrase, nativeLanguage}) => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [addEnglishPhrase, setAddEnglishPhrase] = useState('');
   const [addMalagasyPhrase, setAddMalagasyPhrase] = useState('');
 
-  const isButtonEnable = addEnglishPhrase === '' || addMalagasyPhrase === '' || selectedCategory === '';
+  const isButtonEnable =
+    addEnglishPhrase === '' ||
+    addMalagasyPhrase === '' ||
+    selectedCategory === '';
 
-  const onChangeValue = (itemValue) => {
+  const onChangeValue = itemValue => {
     setSelectedCategory(itemValue);
-  }
+  };
 
-
-
-  
   const addPhrasesToSelectedCategory = () => {
     const newPhrase = {
       catId: selectedCategory,
@@ -43,6 +54,15 @@ export default ({navigation, categories, addNewPhrase}) => {
     setAddEnglishPhrase('');
     setAddMalagasyPhrase('');
   };
+
+  const categoryHeading = LANG_DATA[CATEGORY_HEADING][nativeLanguage];
+  const selectGategory = LANG_DATA[SELECT_CATEGORY][nativeLanguage];
+  const addHeadingEnglish =
+    LANG_DATA[ADD_SECTION_HAEDING_E_ENGLISH][nativeLanguage];
+  const inputField = LANG_DATA[ADD_ENTER_INPUTFIELD][nativeLanguage];
+  const addHeadingMalagasy =
+    LANG_DATA[ADD_SECTION_HAEDING_MALAGASY][nativeLanguage];
+  const addButton = LANG_DATA[ADD_BUTTON][nativeLanguage];
 
   return (
     <SafeAreaView>
@@ -58,20 +78,7 @@ export default ({navigation, categories, addNewPhrase}) => {
               </ToolButton>
             }
           />
-          <ToolBar
-            button={
-              <LanguageSwitcher
-                firstLanguage={LANGUAGE_NAMES.EN}
-                LeftText="EN"
-                RightText="MA"
-                color="#FFFFFF"
-                iconType=""
-                iconName="swap-horiz"
-                onPress={() => null}
-                iconSize={24}
-              />
-            }
-          />
+          <ToolBar button={<LanguageSwitcherContainerEnMg />} />
           <ToolBar
             button={
               <ToolButton onPress={action('clicked-add-button')}>
@@ -81,21 +88,25 @@ export default ({navigation, categories, addNewPhrase}) => {
           />
         </View>
         <View style={styles.heading}>
-          <SectionHeading text="Category: " />
+          <SectionHeading text={categoryHeading} />
           <View style={styles.pickerContainer}>
             <Picker
               selectedValue={selectedCategory}
               style={styles.pickerContent}
               onValueChange={onChangeValue}
-              dropdownIconColor='#06B6D4'>
+              dropdownIconColor="#06B6D4">
               <Picker.Item
-                label='Select Category'
-                value=''
+                label={selectGategory}
+                value=""
                 style={{color: '#06B6D4'}}
               />
               {categories.map((cat, index) => (
                 <Picker.Item
-                  label={cat.name[LANGUAGE_NAMES.EN]}
+                  label={
+                    nativeLanguage === LANGUAGE_NAMES.EN
+                      ? cat.name[LANGUAGE_NAMES.EN]
+                      : cat.name[LANGUAGE_NAMES.MG]
+                  }
                   value={cat.id}
                   key={index}
                 />
@@ -104,12 +115,12 @@ export default ({navigation, categories, addNewPhrase}) => {
           </View>
         </View>
         <View style={styles.heading}>
-          <SectionHeading text="The phrase in English: " />
+          <SectionHeading text={addHeadingEnglish} />
         </View>
         <View style={{marginBottom: 37}}>
           <Textarea
             editable={false}
-            placeholder={'Enter here'}
+            placeholder={inputField}
             multiline={true}
             editable={true}
             phrase={addEnglishPhrase}
@@ -117,12 +128,12 @@ export default ({navigation, categories, addNewPhrase}) => {
           />
         </View>
         <View style={styles.heading}>
-          <SectionHeading text="The phrase in Malagasy: " />
+          <SectionHeading text={addHeadingMalagasy} />
         </View>
         <View style={{marginBottom: 37}}>
           <Textarea
             editable={false}
-            placeholder={'Enter here'}
+            placeholder={inputField}
             multiline={true}
             editable={true}
             phrase={addMalagasyPhrase}
@@ -132,8 +143,8 @@ export default ({navigation, categories, addNewPhrase}) => {
         <View style={{marginTop: 45}}>
           <NextButton
             isDisabled={isButtonEnable}
-            textColor={isButtonEnable ? "#06B6D4" : '#ffffff'}
-            text="Add"
+            textColor={isButtonEnable ? '#06B6D4' : '#ffffff'}
+            text={addButton}
             onPress={addPhrasesToSelectedCategory}
           />
         </View>

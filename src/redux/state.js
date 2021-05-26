@@ -1,4 +1,4 @@
-import {LANGUAGE_NAMES} from '../data/dataUtils';
+import { LANGUAGE_NAMES } from '../data/dataUtils';
 
 export default {
   categories: [],
@@ -6,4 +6,5 @@ export default {
   categoryPhrases: [],
   nativeLanguage: LANGUAGE_NAMES.EN,
   newPhrases: [],
+  learntPhrases: [],
 };

@@ -7,15 +7,24 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
 } from 'react-native';
+
+import {
+  LANG_DATA,
+  CATEGORY_HEADING,
+  CATEGORY_SUB_HEADING,
+  CATEGORY_ANSWEAR_CHOICES,
+  CATEGORY_SUB_HEADING_CHOICES,
+} from '../translations';
+
 import List from '../components/List/List';
 import SectionHeading from '../components/SectionHeading/SectionHeading';
 import ToolBar from '../components/ToolBar/ToolBar';
 import Textarea from '../components/Textarea/Textarea';
 import NextButton from '../components/NextButton/NextButton';
 import ToolButton from '../components/ToolButton/ToolButton';
-import LanguageSwitcher from '../components/LanguageSwitcher/LanguageSwitcher';
 import BackIcon from '../components/ToolButton/assets/back.svg';
 import ModeIcon from '../components/ToolButton/assets/mode.svg';
+import LanguageSwitcherContainerEnMg from '../containers/LanguageSwitcherContainerEnMg';
 
 import {LANGUAGE_NAMES} from '../data/dataUtils';
 import {shuffleArray} from '../utils';
@@ -24,8 +33,13 @@ export default ({
   //nav provider
   navigation,
 
+  //state props
+  categories,
+  learntPhrases,
+  addLearntPhrases,
   categoryPhrases,
   currentCategoryName,
+  nativeLanguage,
 }) => {
   const [originalPhrases, setOriginalPhrases] = useState([]);
   const [phrasesLeft, setPhrasesLeft] = useState([]);
@@ -33,6 +47,11 @@ export default ({
   const [answerOptions, setAnswerOptions] = useState([]);
   const [disableAllOptions, setDisableAllOptions] = useState(false);
   const [shouldReshuffle, setshouldReshuffle] = useState(false);
+
+  // Finding the learnt phrases category
+  const learntCategory = categories.find(cat =>
+    cat.phrasesIds.includes(currentPhrase?.id),
+  );
 
   useEffect(() => {
     setOriginalPhrases(categoryPhrases);
@@ -48,8 +67,13 @@ export default ({
 
   const selectAnswerCallback = useCallback(
     item => {
-      if (item.id === currentPhrase.id) {
-        // TODO add to learned
+      const isCorrect = item.id === currentPhrase.id;
+
+      const isAlredyinLearnPhrases = learntPhrases.every(
+        phrase => phrase.id !== currentPhrase.id,
+      );
+      if (isCorrect && isAlredyinLearnPhrases) {
+        addLearntPhrases(item);
       } else {
         // TODO add to seen
       }
@@ -59,11 +83,11 @@ export default ({
       const answerOptionsWithSelected = answerOptions.map(phrase => {
         return {...phrase, isSelected: phrase.id === item.id};
       });
-
       setAnswerOptions(answerOptionsWithSelected);
     },
     [currentPhrase, setDisableAllOptions, answerOptions],
   );
+
   const nextAnswerCallback = useCallback(() => {
     if (!Boolean(phrasesLeft.length)) {
       setshouldReshuffle(true);
@@ -90,9 +114,15 @@ export default ({
     const newPhrase = phrasesLeftCopy.shift();
     setPhrasesLeft(phrasesLeftCopy);
     setCurrentPhrase(newPhrase);
-
     setAnswerOptionsCallback(originalAll, newPhrase);
   };
+
+  const categoryHeading = LANG_DATA[CATEGORY_HEADING][nativeLanguage];
+  const categorySubHeading = LANG_DATA[CATEGORY_SUB_HEADING][nativeLanguage];
+  const categoryListChoices =
+    LANG_DATA[CATEGORY_ANSWEAR_CHOICES][nativeLanguage];
+  const categoryHeadingListAnswear =
+    LANG_DATA[CATEGORY_SUB_HEADING_CHOICES][nativeLanguage];
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -109,20 +139,7 @@ export default ({
                 </ToolButton>
               }
             />
-            <ToolBar
-              button={
-                <LanguageSwitcher
-                  firstLanguage={LANGUAGE_NAMES.EN}
-                  LeftText="EN"
-                  RightText="MA"
-                  color="#FFFFFF"
-                  iconType=""
-                  iconName="swap-horiz"
-                  onPress={() => null}
-                  iconSize={24}
-                />
-              }
-            />
+            <ToolBar button={<LanguageSwitcherContainerEnMg />} />
             <ToolBar
               button={
                 <ToolButton onPress={action('clicked-add-button')}>
@@ -132,11 +149,15 @@ export default ({
             />
           </View>
           <View style={styles.heading}>
-            <SectionHeading text="Category: " />
-            <Text>{currentCategoryName}</Text>
+            <SectionHeading text={categoryHeading} />
+            <Text>
+              {currentCategoryName
+                ? currentCategoryName
+                : `Learnt phrases/${learntCategory?.name[LANGUAGE_NAMES.EN]}`}
+            </Text>
           </View>
           <View style={styles.heading}>
-            <SectionHeading text="The phrase: " />
+            <SectionHeading text={categorySubHeading} />
           </View>
           <View style={{marginBottom: 37}}>
             <Textarea
@@ -144,6 +165,8 @@ export default ({
               phrase={
                 shouldReshuffle
                   ? 'You have answered all the questions in this category'
+                  : nativeLanguage === LANGUAGE_NAMES.MG
+                  ? currentPhrase?.name?.[LANGUAGE_NAMES.EN]
                   : currentPhrase?.name?.[LANGUAGE_NAMES.MG]
               }
             />
@@ -151,12 +174,12 @@ export default ({
           {!shouldReshuffle && Boolean(answerOptions && answerOptions.length) && (
             <View>
               <View style={styles.heading}>
-                <SectionHeading text="Pick a solution: " />
+                <SectionHeading text={categoryHeadingListAnswear} />
               </View>
               <List
-                lang={LANGUAGE_NAMES.EN}
+                lang={nativeLanguage}
                 data={answerOptions}
-                text="Pick"
+                text={categoryListChoices}
                 color="#06B6D4"
                 iconType="material-community"
                 iconName="arrow-right"
