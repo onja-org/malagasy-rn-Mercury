@@ -10,7 +10,7 @@ function mapStateToProps(state) {
   };
 }
 const mapDispatchToProps = {
-  addNewPhrase
+  addNewPhrase,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Adding);

@@ -41,7 +41,6 @@ export default ({
 }) => {
   useEffect(() => {
     // fetch categories
-    synchronizeStorageToRedux();
     const categories = getAllCategories();
     setCategories(categories);
     synchronizeStorageToRedux();
@@ -60,6 +59,7 @@ export default ({
       ...userPhrasesForCategory,
     ];
     setPhrases(combinedPhrasesForCategory);
+
     navigation.navigate('Learn');
   };
 
@@ -69,7 +69,7 @@ export default ({
 
   const openLearntPhrases = item => {
     // Using the learntPhrases in the state
-    setCurrentCategory(item.id);
+    setCurrentCategory(item);
     setPhrases(learntPhrases);
     navigation.navigate('Learn');
   };
@@ -120,7 +120,9 @@ export default ({
             />
             <ToolBar
               button={
-                <ToolButton onPress={action('clicked-add-button')}>
+                <ToolButton
+                  onPress={openLearntPhrases}
+                  disabled={learntPhrases.length === 0}>
                   <CheckAllIcon width={24} height={24} fill="#FFFFFF" />
                 </ToolButton>
               }
