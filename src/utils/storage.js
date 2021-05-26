@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 export const NEW_PHRASES_KEY = '@malagasyApp/newPhrasesKey';
+export const LEARNT_PHRASES_KEY = '@malagasyApp/learntPhrases';
 
 export const storeData = async (itemKey, value) => {
   try {
@@ -17,3 +18,4 @@ export const getData = async itemKey => {
     alert(e);
   }
 };
+

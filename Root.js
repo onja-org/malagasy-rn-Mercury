@@ -18,7 +18,6 @@ const Root = () => {
     }
   }, [toggleStorybook]);
 
-  // return storybookActive ? <Storybook /> : <App />;
   return storybookActive ? <App /> : <App />;
 };
 

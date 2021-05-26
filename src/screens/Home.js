@@ -16,7 +16,6 @@ import {
 import List from '../components/List/List';
 import SectionHeading from '../components/SectionHeading/SectionHeading';
 import ToolBar from '../components/ToolBar/ToolBar';
-
 import ToolButton from '../components/ToolButton/ToolButton';
 import LanguageSwitcher from '../components/LanguageSwitcher/LanguageSwitcher';
 import AddIcon from '../components/ToolButton/assets/add.svg';
@@ -27,21 +26,25 @@ import ModeIcon from '../components/ToolButton/assets/mode.svg';
 export default ({
   //nav provider
   navigation,
+
   //state props
   categories,
+  learntPhrases,
   nativeLanguage,
+
   //actions
   setCategories,
   setCurrentCategory,
   setPhrases,
   newPhrases,
-  synchronizeStorageToRedux
+  synchronizeStorageToRedux,
 }) => {
   useEffect(() => {
     // fetch categories
     synchronizeStorageToRedux();
     const categories = getAllCategories();
     setCategories(categories);
+    synchronizeStorageToRedux();
   }, []);
 
   const openCategoryPhrases = item => {
@@ -63,6 +66,24 @@ export default ({
   const openAddingScreen = () => {
     navigation.navigate('Add');
   };
+
+  const openLearntPhrases = item => {
+    // Using the learntPhrases in the state
+    setCurrentCategory(item.id);
+    setPhrases(learntPhrases);
+    navigation.navigate('Learn');
+  };
+
+  // Changing the label of the learnt phrases
+  let wordAndPhrase = '';
+
+  if (learntPhrases.length > 1) {
+    wordAndPhrase = `${learntPhrases.length} words and phrases`;
+  } else if (learntPhrases.length === 1) {
+    wordAndPhrase = `${learntPhrases.length} word and phrase`;
+  } else {
+    wordAndPhrase = 'No word and phrase';
+  }
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -139,12 +160,13 @@ export default ({
             <SectionHeading text="Learnt phrases:" />
           </View>
           <List
-            data={[{id: 2, name: '10 words and phrases'}]}
+            data={[{id: '###learnt-phrases###', name: wordAndPhrase}]}
             text={'Learn'}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"
-            makeAction={() => {}}
+            disableAllOptions={learntPhrases.length === 0}
+            makeAction={openLearntPhrases}
           />
         </View>
       </KeyboardAvoidingView>
