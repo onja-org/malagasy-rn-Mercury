@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import {action} from '@storybook/addon-actions';
+import React, { useState, useEffect, useCallback } from 'react';
+import { action } from '@storybook/addon-actions';
 import {
   Text,
   View,
@@ -7,18 +7,28 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
 } from 'react-native';
+
+import {
+  LANG_DATA, CATEGORY_HEADING,
+  CATEGORY_SUB_HEADING,
+  CATEGORY_ANSWEAR_CHOICES,
+  CATEGORY_SUB_HEADING_CHOICES
+} from '../translations';
+
 import List from '../components/List/List';
 import SectionHeading from '../components/SectionHeading/SectionHeading';
 import ToolBar from '../components/ToolBar/ToolBar';
 import Textarea from '../components/Textarea/Textarea';
 import NextButton from '../components/NextButton/NextButton';
 import ToolButton from '../components/ToolButton/ToolButton';
-import LanguageSwitcher from '../components/LanguageSwitcher/LanguageSwitcher';
 import BackIcon from '../components/ToolButton/assets/back.svg';
 import ModeIcon from '../components/ToolButton/assets/mode.svg';
+import LanguageSwitcherContainerEnMg from '../containers/LanguageSwitcherContainerEnMg';
 
-import {LANGUAGE_NAMES} from '../data/dataUtils';
-import {shuffleArray} from '../utils';
+import { LANGUAGE_NAMES } from '../data/dataUtils';
+import { shuffleArray } from '../utils';
+
+
 
 export default ({
   //nav provider
@@ -30,6 +40,7 @@ export default ({
   addLearntPhrases,
   categoryPhrases,
   currentCategoryName,
+  nativeLanguage
 }) => {
   const [originalPhrases, setOriginalPhrases] = useState([]);
   const [phrasesLeft, setPhrasesLeft] = useState([]);
@@ -46,6 +57,7 @@ export default ({
   useEffect(() => {
     setOriginalPhrases(categoryPhrases);
     setNewQuestionPhrase(categoryPhrases, categoryPhrases);
+
   }, [categoryPhrases]);
 
   const setAnswerOptionsCallback = (original, current) => {
@@ -59,7 +71,7 @@ export default ({
     item => {
       if (
         item.id === currentPhrase.id &&
-        learntPhrases.every(phrase => phrase.id !== currentPhrase.id)
+        learntPhrases?.every(phrase => phrase.id !== currentPhrase.id)
       ) {
         addLearntPhrases(item);
       } else {
@@ -69,7 +81,7 @@ export default ({
       setDisableAllOptions(true);
 
       const answerOptionsWithSelected = answerOptions.map(phrase => {
-        return {...phrase, isSelected: phrase.id === item.id};
+        return { ...phrase, isSelected: phrase.id === item.id };
       });
       setAnswerOptions(answerOptionsWithSelected);
     },
@@ -105,10 +117,17 @@ export default ({
     setAnswerOptionsCallback(originalAll, newPhrase);
   };
 
+
+  const categoryHeading = LANG_DATA[CATEGORY_HEADING][nativeLanguage];
+  const categorySubHeading = LANG_DATA[CATEGORY_SUB_HEADING][nativeLanguage];
+  const categoryListChoices = LANG_DATA[CATEGORY_ANSWEAR_CHOICES][nativeLanguage];
+  const categoryHeadingListAnswear = LANG_DATA[CATEGORY_SUB_HEADING_CHOICES][nativeLanguage]
+
+
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
-        <View style={{paddingHorizontal: 35, paddingVertical: 23}}>
+    <SafeAreaView style={{ flex: 1 }}>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+        <View style={{ paddingHorizontal: 35, paddingVertical: 23 }}>
           <View style={styles.header}>
             <ToolBar
               button={
@@ -122,15 +141,7 @@ export default ({
             />
             <ToolBar
               button={
-                <LanguageSwitcher
-                  firstLanguage={LANGUAGE_NAMES.EN}
-                  LeftText="EN"
-                  RightText="MA"
-                  color="#FFFFFF"
-                  iconType=""
-                  iconName="swap-horiz"
-                  onPress={() => null}
-                  iconSize={24}
+                <LanguageSwitcherContainerEnMg
                 />
               }
             />
@@ -143,7 +154,7 @@ export default ({
             />
           </View>
           <View style={styles.heading}>
-            <SectionHeading text="Category: " />
+            <SectionHeading text={categoryHeading} />
             <Text>
               {currentCategoryName
                 ? currentCategoryName
@@ -151,27 +162,27 @@ export default ({
             </Text>
           </View>
           <View style={styles.heading}>
-            <SectionHeading text="The phrase: " />
+            <SectionHeading text={categorySubHeading} />
           </View>
-          <View style={{marginBottom: 37}}>
+          <View style={{ marginBottom: 37 }}>
             <Textarea
               editable={false}
               phrase={
                 shouldReshuffle
                   ? 'You have answered all the questions in this category'
-                  : currentPhrase?.name?.[LANGUAGE_NAMES.MG]
+                  : nativeLanguage === LANGUAGE_NAMES.MG ? currentPhrase?.name?.[LANGUAGE_NAMES.EN] : currentPhrase?.name?.[LANGUAGE_NAMES.MG]
               }
             />
           </View>
           {!shouldReshuffle && Boolean(answerOptions && answerOptions.length) && (
             <View>
               <View style={styles.heading}>
-                <SectionHeading text="Pick a solution: " />
+                <SectionHeading text={categoryHeadingListAnswear} />
               </View>
               <List
-                lang={LANGUAGE_NAMES.EN}
+                lang={nativeLanguage}
                 data={answerOptions}
-                text="Pick"
+                text={categoryListChoices}
                 color="#06B6D4"
                 iconType="material-community"
                 iconName="arrow-right"
@@ -183,7 +194,7 @@ export default ({
           )}
 
           {disableAllOptions && !shouldReshuffle && (
-            <View style={{marginTop: 45}}>
+            <View style={{ marginTop: 45 }}>
               <NextButton
                 isDisabled={false}
                 textColor="#FFFFFF"
@@ -193,7 +204,7 @@ export default ({
             </View>
           )}
           {shouldReshuffle && (
-            <View style={{marginTop: 45}}>
+            <View style={{ marginTop: 45 }}>
               <NextButton
                 isDisabled={false}
                 textColor="#FFFFFF"
