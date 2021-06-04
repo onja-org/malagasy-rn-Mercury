@@ -21,15 +21,15 @@ export default ({navigation, categories, addNewPhrase}) => {
   const [addEnglishPhrase, setAddEnglishPhrase] = useState('');
   const [addMalagasyPhrase, setAddMalagasyPhrase] = useState('');
 
-  const isButtonEnable = addEnglishPhrase === '' || addMalagasyPhrase === '' || selectedCategory === '';
+  const isButtonEnable =
+    addEnglishPhrase === '' ||
+    addMalagasyPhrase === '' ||
+    selectedCategory === '';
 
-  const onChangeValue = (itemValue) => {
+  const onChangeValue = itemValue => {
     setSelectedCategory(itemValue);
-  }
+  };
 
-
-
-  
   const addPhrasesToSelectedCategory = () => {
     const newPhrase = {
       catId: selectedCategory,
@@ -87,10 +87,10 @@ export default ({navigation, categories, addNewPhrase}) => {
               selectedValue={selectedCategory}
               style={styles.pickerContent}
               onValueChange={onChangeValue}
-              dropdownIconColor='#06B6D4'>
+              dropdownIconColor="#06B6D4">
               <Picker.Item
-                label='Select Category'
-                value=''
+                label="Select Category"
+                value=""
                 style={{color: '#06B6D4'}}
               />
               {categories.map((cat, index) => (
@@ -132,7 +132,7 @@ export default ({navigation, categories, addNewPhrase}) => {
         <View style={{marginTop: 45}}>
           <NextButton
             isDisabled={isButtonEnable}
-            textColor={isButtonEnable ? "#06B6D4" : '#ffffff'}
+            textColor={isButtonEnable ? '#06B6D4' : '#ffffff'}
             text="Add"
             onPress={addPhrasesToSelectedCategory}
           />
