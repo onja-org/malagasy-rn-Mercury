@@ -1,4 +1,4 @@
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import Home from '../screens/Home';
 
 import {
@@ -6,6 +6,9 @@ import {
   setCurrentCategory,
   setPhrases,
   synchronizeStorageToRedux,
+  setLearntPhrases,
+  addLearntPhrase,
+  setLanguageName,
 } from '../redux/actions';
 
 import {
@@ -27,6 +30,9 @@ const mapDispatchToProps = {
   setCategories,
   setCurrentCategory,
   setPhrases,
+  setLearntPhrases,
+  addLearntPhrase,
+  setLanguageName,
   synchronizeStorageToRedux,
 };
 

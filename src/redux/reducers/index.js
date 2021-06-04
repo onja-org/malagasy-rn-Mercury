@@ -1,4 +1,4 @@
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux';
 // import all of constat case name for the swich
 // in reducers
 import {
@@ -38,6 +38,7 @@ function categoryPhrases(state = [], action) {
       return state;
   }
 }
+
 
 function nativeLanguage(state = '', action) {
   switch (action.type) {
