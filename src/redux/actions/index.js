@@ -100,13 +100,13 @@ export function addLearntPhrases(phrase) {
 
 export function synchronizeStorageToRedux() {
   return async dispatch => {
-    const storedPhrases = await getData(NEW_PHRASES_KEY);
+    const storedUserPhrases = await getData(NEW_PHRASES_KEY);
     const storedLearntPhrase = await getData(LEARNT_PHRASES_KEY);
-    if (!storedPhrases || !storedLearntPhrase) {
+    if (storedUserPhrases) {
+      dispatch(setNewPhrases(storedUserPhrases));
       return Promise.resolve();
+    } else if (storedLearntPhrases) {
+      dispatch(setLearntPhrases(storedLearntPhrase));
     }
-    dispatch(setNewPhrases(storedPhrases));
-    dispatch(setLearntPhrases(storedLearntPhrase));
-    return Promise.resolve();
   };
 }

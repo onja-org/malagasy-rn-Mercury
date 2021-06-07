@@ -11,7 +11,7 @@ import {
   SET_NEW_PHRASES,
 } from '../constants';
 
-import {lightTheme} from '../../ThemeColor/ThemeColor';
+import {LIGHT_THEME} from '../../ThemeColor/ThemeColor';
 // categories reducer
 function categories(state = [], action) {
   switch (action.type) {
@@ -53,7 +53,7 @@ function nativeLanguage(state = '', action) {
 }
 
 const initialState = {
-  theme: lightTheme
+  theme: LIGHT_THEME
 }
 
 function theme(state = initialState, action) {

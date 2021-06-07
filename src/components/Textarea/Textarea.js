@@ -3,6 +3,7 @@ import * as React from 'react';
 import { SafeAreaView, TextInput } from 'react-native';
 import {
   getStyles,
+  LIGHT_THEME,
   INPUT_STYLE,
   TEXTAREA_STYLE,
   TEXT_TEXTAREA_CONTAINER_STYLE,
@@ -20,12 +21,12 @@ export default function Example({
     ? getStyles(INPUT_STYLE, theme)
     : getStyles(TEXTAREA_STYLE, theme);
 
-  const placeholderStyle = theme === 'light' ? '#11182780' : '#ffffff';
+  const placeholderStyle = theme === LIGHT_THEME ? '#11182780' : '#ffffff';
 
   return (
     <SafeAreaView style={getStyles(TEXT_TEXTAREA_CONTAINER_STYLE, theme)}>
       <TextInput
-        style={theme === 'light' ? textStyle : {color: '#ffffff'}}
+        style={theme === LIGHT_THEME ? textStyle : {color: '#ffffff'}}
         value={phrase}
         editable={editable}
         onChangeText={onChange}
