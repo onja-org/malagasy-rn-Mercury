@@ -12,7 +12,7 @@ import {
   LANG_DATA,
   CATEGORY_HEADING,
   CATEGORY_SUB_HEADING,
-  CATEGORY_ANSWEAR_CHOICES,
+  CATEGORY_ANSWER_CHOICES,
   CATEGORY_SUB_HEADING_CHOICES,
 } from '../translations';
 
@@ -120,8 +120,8 @@ export default ({
   const categoryHeading = LANG_DATA[CATEGORY_HEADING][nativeLanguage];
   const categorySubHeading = LANG_DATA[CATEGORY_SUB_HEADING][nativeLanguage];
   const categoryListChoices =
-    LANG_DATA[CATEGORY_ANSWEAR_CHOICES][nativeLanguage];
-  const categoryHeadingListAnswear =
+    LANG_DATA[CATEGORY_ANSWER_CHOICES][nativeLanguage];
+  const categoryHeadingListAnswer =
     LANG_DATA[CATEGORY_SUB_HEADING_CHOICES][nativeLanguage];
 
   return (
@@ -174,7 +174,7 @@ export default ({
           {!shouldReshuffle && Boolean(answerOptions && answerOptions.length) && (
             <View>
               <View style={styles.heading}>
-                <SectionHeading text={categoryHeadingListAnswear} />
+                <SectionHeading text={categoryHeadingListAnswer} />
               </View>
               <List
                 lang={nativeLanguage}

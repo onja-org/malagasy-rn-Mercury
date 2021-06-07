@@ -21,9 +21,9 @@ import {
   LANG_DATA,
   CATEGORY_HEADING,
   SELECT_CATEGORY,
-  ADD_SECTION_HAEDING_E_ENGLISH,
+  ADD_SECTION_HEADING_E_ENGLISH,
   ADD_ENTER_INPUTFIELD,
-  ADD_SECTION_HAEDING_MALAGASY,
+  ADD_SECTION_HEADING_MALAGASY,
   ADD_BUTTON,
 } from '../translations';
 
@@ -58,10 +58,10 @@ export default ({navigation, categories, addNewPhrase, nativeLanguage}) => {
   const categoryHeading = LANG_DATA[CATEGORY_HEADING][nativeLanguage];
   const selectGategory = LANG_DATA[SELECT_CATEGORY][nativeLanguage];
   const addHeadingEnglish =
-    LANG_DATA[ADD_SECTION_HAEDING_E_ENGLISH][nativeLanguage];
+    LANG_DATA[ADD_SECTION_HEADING_E_ENGLISH][nativeLanguage];
   const inputField = LANG_DATA[ADD_ENTER_INPUTFIELD][nativeLanguage];
   const addHeadingMalagasy =
-    LANG_DATA[ADD_SECTION_HAEDING_MALAGASY][nativeLanguage];
+    LANG_DATA[ADD_SECTION_HEADING_MALAGASY][nativeLanguage];
   const addButton = LANG_DATA[ADD_BUTTON][nativeLanguage];
 
   return (
