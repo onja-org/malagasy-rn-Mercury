@@ -16,6 +16,9 @@ export const ADD_SECTION_HAEDING_E_ENGLISH = 'ADD_SECTION_HAEDING_ENGLISH'
 export const ADD_ENTER_INPUTFIELD = 'ADD_ENTER_INPUTFIELD'
 export const ADD_SECTION_HAEDING_MALAGASY = 'ADD_SECTION_HAEDING_MALAGASY'
 export const ADD_BUTTON = 'ADD_BUTTON'
+export const NEXT_BUTTON = 'NEXT_BUTTON'
+export const RESHUFELE_BUTTON = 'RESHUFELE_BUTTON'
+export const ANSWER_VALIDATION = 'ANSWER_VALIDATION'
 
 export const LANG_DATA = {
     [CATEGORY_HEADING]: {
@@ -76,6 +79,18 @@ export const LANG_DATA = {
         [LANGUAGE_NAMES.EN]: 'Add',
         [LANGUAGE_NAMES.MG]: "Ampio",
     },
+    [NEXT_BUTTON]: {
+        [LANGUAGE_NAMES.EN]: 'Next',
+        [LANGUAGE_NAMES.MG]: 'Manaraka',
+    },
+    [RESHUFELE_BUTTON]: {
+        [LANGUAGE_NAMES.EN]: 'Reshuffle',
+        [LANGUAGE_NAMES.MG]: 'Afangaroy',
+    },
+    [ANSWER_VALIDATION]: {
+        [LANGUAGE_NAMES.EN]: 'You have answered all the questions in this category',
+        [LANGUAGE_NAMES.MG]: "Efa voavalinao daholo ny fanontaniana amin'ity sokajy ity.",
+    }
 
 };
 

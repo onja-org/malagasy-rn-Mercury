@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { action } from '@storybook/addon-actions';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   Text,
   View,
@@ -9,10 +8,23 @@ import {
 } from 'react-native';
 
 import {
+  toggleTheme, 
+  getStyles, 
+  getFillColor, 
+  CONTAINER_STYLE,
+  HEADER_STYLE,
+  HEADING_STYLE,
+  SECTION_HEADING_TEXT_STYLE
+} from '../ThemeColor/ThemeColor';
+
+import {
   LANG_DATA, CATEGORY_HEADING,
   CATEGORY_SUB_HEADING,
   CATEGORY_ANSWEAR_CHOICES,
-  CATEGORY_SUB_HEADING_CHOICES
+  CATEGORY_SUB_HEADING_CHOICES,
+  NEXT_BUTTON,
+  RESHUFELE_BUTTON,
+  ANSWER_VALIDATION
 } from '../translations';
 
 import List from '../components/List/List';
@@ -40,6 +52,8 @@ export default ({
   addLearntPhrases,
   categoryPhrases,
   currentCategoryName,
+  theme,
+  setTheme,
   nativeLanguage
 }) => {
   const [originalPhrases, setOriginalPhrases] = useState([]);
@@ -70,8 +84,7 @@ export default ({
   const selectAnswerCallback = useCallback(
     item => {
       if (
-        item.id === currentPhrase.id &&
-        learntPhrases?.every(phrase => phrase.id !== currentPhrase.id)
+        item.id === currentPhrase.id && learntPhrases?.every(phrase => phrase.id !== currentPhrase.id)
       ) {
         addLearntPhrases(item);
       } else {
@@ -121,63 +134,66 @@ export default ({
   const categoryHeading = LANG_DATA[CATEGORY_HEADING][nativeLanguage];
   const categorySubHeading = LANG_DATA[CATEGORY_SUB_HEADING][nativeLanguage];
   const categoryListChoices = LANG_DATA[CATEGORY_ANSWEAR_CHOICES][nativeLanguage];
-  const categoryHeadingListAnswear = LANG_DATA[CATEGORY_SUB_HEADING_CHOICES][nativeLanguage]
+  const categoryHeadingListAnswear = LANG_DATA[CATEGORY_SUB_HEADING_CHOICES][nativeLanguage];
+  const nextButton = LANG_DATA[NEXT_BUTTON][nativeLanguage];
+  const reshuffleButton = LANG_DATA[RESHUFELE_BUTTON][nativeLanguage];
+  const answerValidation = LANG_DATA[ANSWER_VALIDATION][nativeLanguage];
 
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
-        <View style={{ paddingHorizontal: 35, paddingVertical: 23 }}>
-          <View style={styles.header}>
+    <SafeAreaView style={{flex: 1}}>
+      <KeyboardAvoidingView style={{flex: 1}} behavior="padding" style={getStyles(CONTAINER_STYLE, theme)}>
+        <View style={{paddingHorizontal: 35, paddingVertical: 23}}>
+          <View style={getStyles(HEADER_STYLE, theme)}>
             <ToolBar
               button={
                 <ToolButton
                   onPress={() => {
                     navigation.navigate('Home');
                   }}>
-                  <BackIcon width={24} height={24} fill="#FFFFFF" />
+                  <BackIcon width={24} height={24} fill={getFillColor(theme)} />
                 </ToolButton>
               }
             />
             <ToolBar
               button={
-                <LanguageSwitcherContainerEnMg
-                />
+                <LanguageSwitcherContainerEnMg color={getFillColor(theme)} />
               }
             />
             <ToolBar
               button={
-                <ToolButton onPress={action('clicked-add-button')}>
-                  <ModeIcon width={24} height={24} fill="#FFFFFF" />
+                <ToolButton onPress={() => toggleTheme(setTheme, theme)}>
+                  <ModeIcon width={24} height={24} fill={getFillColor(theme)} />
                 </ToolButton>
               }
             />
           </View>
-          <View style={styles.heading}>
-            <SectionHeading text={categoryHeading} />
-            <Text>
+          <View style={getStyles(HEADING_STYLE, theme)}>
+            <SectionHeading text={categoryHeading} theme={theme}/>
+            <Text style={getStyles(SECTION_HEADING_TEXT_STYLE, theme)}>
               {currentCategoryName
                 ? currentCategoryName
                 : `Learnt phrases/${learntCategory?.name[LANGUAGE_NAMES.EN]}`}
             </Text>
           </View>
-          <View style={styles.heading}>
-            <SectionHeading text={categorySubHeading} />
+          <View style={getStyles(HEADING_STYLE, theme)}>
+            <SectionHeading text={categorySubHeading} theme={theme} />
           </View>
           <View style={{ marginBottom: 37 }}>
             <Textarea
+              theme={theme}
               editable={false}
               phrase={
                 shouldReshuffle
-                  ? 'You have answered all the questions in this category'
+                  ? answerValidation
                   : nativeLanguage === LANGUAGE_NAMES.MG ? currentPhrase?.name?.[LANGUAGE_NAMES.EN] : currentPhrase?.name?.[LANGUAGE_NAMES.MG]
               }
             />
           </View>
           {!shouldReshuffle && Boolean(answerOptions && answerOptions.length) && (
             <View>
-              <View style={styles.heading}>
-                <SectionHeading text={categoryHeadingListAnswear} />
+              <View style={getStyles(HEADING_STYLE, theme)}>
+                <SectionHeading text={categoryHeadingListAnswear} theme={theme} />
               </View>
               <List
                 lang={nativeLanguage}
@@ -189,6 +205,7 @@ export default ({
                 makeAction={selectAnswerCallback}
                 randomPhraseId={currentPhrase.id}
                 disableAllOptions={disableAllOptions}
+                theme={theme}
               />
             </View>
           )}
@@ -197,8 +214,8 @@ export default ({
             <View style={{ marginTop: 45 }}>
               <NextButton
                 isDisabled={false}
-                textColor="#FFFFFF"
-                text={'Next'}
+                textColor={getFillColor(theme)}
+                text={nextButton}
                 onPress={nextAnswerCallback}
               />
             </View>
@@ -207,8 +224,8 @@ export default ({
             <View style={{ marginTop: 45 }}>
               <NextButton
                 isDisabled={false}
-                textColor="#FFFFFF"
-                text={'Reshuffle'}
+                textColor={getFillColor(theme)}
+                text={reshuffleButton}
                 onPress={reshuffleCallback}
               />
             </View>
@@ -220,14 +237,6 @@ export default ({
 };
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    paddingBottom: 56,
-  },
-  heading: {
-    paddingBottom: 15,
-    flexDirection: 'row',
-  },
   debugList: {
     flexDirection: 'row',
     width: 250,

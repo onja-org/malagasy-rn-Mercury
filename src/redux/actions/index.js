@@ -5,6 +5,7 @@ import {
   SET_PHRASES,
   SET_LANGUAGE_NAME,
   SET_CURRENT_CATEGORY,
+  SET_THEME,
   SET_NEW_PHRASES,
   SET_LEARNT_PHRASES,
 } from '../constants';
@@ -45,6 +46,12 @@ export function setLanguageName(language) {
   };
 }
 
+export function setTheme(theme) {
+  return {
+    type: SET_THEME,
+    payload: theme
+  }
+}
 
 
 export function setNewPhrases(phrases) {
@@ -95,7 +102,7 @@ export function synchronizeStorageToRedux() {
   return async dispatch => {
     const storedPhrases = await getData(NEW_PHRASES_KEY);
     const storedLearntPhrase = await getData(LEARNT_PHRASES_KEY);
-    if (!storedPhrases && !storedLearntPhrase) {
+    if (!storedPhrases || !storedLearntPhrase) {
       return Promise.resolve();
     }
     dispatch(setNewPhrases(storedPhrases));

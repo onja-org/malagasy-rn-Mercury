@@ -6,9 +6,12 @@ import {
   SET_PHRASES,
   SET_LANGUAGE_NAME,
   SET_CURRENT_CATEGORY,
+  SET_THEME,
   SET_LEARNT_PHRASES,
   SET_NEW_PHRASES,
 } from '../constants';
+
+import {lightTheme} from '../../ThemeColor/ThemeColor';
 // categories reducer
 function categories(state = [], action) {
   switch (action.type) {
@@ -49,6 +52,19 @@ function nativeLanguage(state = '', action) {
   }
 }
 
+const initialState = {
+  theme: lightTheme
+}
+
+function theme(state = initialState, action) {
+  switch (action.type) {
+    case SET_THEME: 
+      return action.payload;
+    default: 
+        return state;
+  }
+}
+
 function newPhrases(state = [], action) {
   switch (action.type) {
     case SET_NEW_PHRASES:
@@ -73,6 +89,7 @@ export default combineReducers({
   categories,
   categoryPhrases,
   nativeLanguage,
+  theme,
   newPhrases,
   learntPhrases,
 });
