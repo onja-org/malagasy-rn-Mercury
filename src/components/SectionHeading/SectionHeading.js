@@ -1,23 +1,14 @@
 import React from 'react';
-import {Text, SafeAreaView, StyleSheet} from 'react-native';
+import {Text, SafeAreaView} from 'react-native';
 
-export default function SectionHeading({text}) {
+import {getStyles, SECTION_HEADING_TEXT_STYLE} from '../../ThemeColor/ThemeColor'
+
+export default function SectionHeading({text, theme}) {
   return (
     <SafeAreaView>
-      <Text h2 style={styles.Heading}>
+      <Text h2 style={getStyles(SECTION_HEADING_TEXT_STYLE, theme)}>
         {text}
       </Text>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  Heading: {
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: '600',
-    fontSize: 18,
-    lineHeight: 22,
-    color: '#111827',
-  },
-});

@@ -5,6 +5,7 @@ import { LANGUAGE_NAMES } from '../../data/dataUtils'
 export default function LanguageSwitcherEnMg({
     nativeLanguage,
     setLanguageName,
+    color
 
 }) {
 
@@ -19,7 +20,7 @@ export default function LanguageSwitcherEnMg({
             firstLanguage={nativeLanguage ? nativeLanguage : nativeLanguage = LANGUAGE_NAMES.MG}
             LeftText={nativeLanguage === LANGUAGE_NAMES.EN ? "EN" : 'MA'}
             RightText={nativeLanguage === LANGUAGE_NAMES.EN ? "MA" : 'EN'}
-            color="#FFFFFF"
+            color={color}
             iconType=""
             iconName="swap-horiz"
             onPress={switchLanguage}

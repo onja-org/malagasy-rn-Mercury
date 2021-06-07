@@ -1,26 +1,32 @@
 import { connect } from 'react-redux';
 import Learning from '../screens/Learning';
-import { setLearntPhrases, addLearntPhrases } from '../redux/actions/index';
 import {
-  categoriesRoot,
-  categoryPhrasesRoot,
+  categoryPhrasesRoot, 
   currentCategoryName,
+  themeRoot,
+  categoriesRoot,
   learntPhrasesRoot,
   nativeLanguageRoot
 } from '../redux/selectors';
 
+import {
+  setTheme,
+  addLearntPhrases,
+} from '../redux/actions';
 
 function mapStateToProps(state) {
   return {
     categoryPhrases: categoryPhrasesRoot(state),
     currentCategoryName: currentCategoryName(state),
+    theme: themeRoot(state),
     learntPhrases: learntPhrasesRoot(state),
     categories: categoriesRoot(state),
     nativeLanguage: nativeLanguageRoot(state),
   };
 }
+
 const mapDispatchToProps = {
-  setLearntPhrases,
+  setTheme,
   addLearntPhrases,
 };
 

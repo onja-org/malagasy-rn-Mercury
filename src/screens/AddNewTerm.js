@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
-import { action } from '@storybook/addon-actions';
-import { View, StyleSheet, SafeAreaView } from 'react-native';
+import React, {useState} from 'react';
+import {
+  View, 
+  StyleSheet, 
+  SafeAreaView, 
+  KeyboardAvoidingView
+} from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import 'react-native-get-random-values';
 import { v4 as uuid } from 'uuid';
@@ -17,6 +21,14 @@ import LanguageSwitcherContainerEnMg from '../containers/LanguageSwitcherContain
 
 import { LANGUAGE_NAMES } from '../data/dataUtils';
 
+import {
+  toggleTheme, 
+  getStyles, 
+  getFillColor, 
+  CONTAINER_STYLE,
+  HEADER_STYLE,
+  HEADING_STYLE,
+} from '../ThemeColor/ThemeColor';
 
 import {
   LANG_DATA,
@@ -28,7 +40,8 @@ import {
   ADD_BUTTON,
 } from '../translations';
 
-export default ({ navigation, categories, addNewPhrase, nativeLanguage, }) => {
+export default ({ navigation, categories, addNewPhrase, nativeLanguage, theme, 
+    setTheme }) => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [addEnglishPhrase, setAddEnglishPhrase] = useState('');
   const [addMalagasyPhrase, setAddMalagasyPhrase] = useState('');
@@ -66,102 +79,98 @@ export default ({ navigation, categories, addNewPhrase, nativeLanguage, }) => {
 
   return (
     <SafeAreaView>
-      <View style={{ paddingHorizontal: 35, paddingVertical: 23 }}>
-        <View style={styles.header}>
-          <ToolBar
-            button={
-              <ToolButton
-                onPress={() => {
-                  navigation.navigate('Home');
-                }}>
-                <BackIcon width={24} height={24} fill="#FFFFFF" />
-              </ToolButton>
-            }
-          />
-          <ToolBar
-            button={
-              <LanguageSwitcherContainerEnMg />
-            }
-          />
-          <ToolBar
-            button={
-              <ToolButton onPress={action('clicked-add-button')}>
-                <ModeIcon width={24} height={24} fill="#FFFFFF" />
-              </ToolButton>
-            }
-          />
-        </View>
-        <View style={styles.heading}>
-          <SectionHeading text={categoryHeading} />
-          <View style={styles.pickerContainer}>
-            <Picker
-              selectedValue={selectedCategory}
-              style={styles.pickerContent}
-              onValueChange={onChangeValue}
-              dropdownIconColor="#06B6D4">
-              <Picker.Item
-                label={selectGategory}
-                value=''
-                style={{ color: '#06B6D4' }}
-              />
-              {categories.map((cat, index) => (
+      <KeyboardAvoidingView style={{flex: 1}} behavior="padding" style={getStyles(CONTAINER_STYLE, theme)}>
+        <View style={{paddingHorizontal: 35, paddingVertical: 23}}>
+          <View style={getStyles(HEADER_STYLE, theme)}>
+            <ToolBar
+              button={
+                <ToolButton
+                  onPress={() => {
+                    navigation.navigate('Home');
+                  }}>
+                  <BackIcon width={24} height={24} fill={getFillColor(theme)} />
+                </ToolButton>
+              }
+            />
+            <ToolBar
+              button={
+                <LanguageSwitcherContainerEnMg color={getFillColor(theme)} />
+              }
+            />
+            <ToolBar
+              button={
+                <ToolButton onPress={() => toggleTheme(setTheme, theme)}>
+                  <ModeIcon width={24} height={24} fill={getFillColor(theme)} />
+                </ToolButton>
+              }
+            />
+          </View>
+          <View style={getStyles(HEADING_STYLE, theme)}>
+            <SectionHeading text={categoryHeading} theme={theme} />
+            <View style={styles.pickerContainer}>
+              <Picker
+                selectedValue={selectedCategory}
+                style={styles.pickerContent}
+                onValueChange={onChangeValue}
+                dropdownIconColor='#06B6D4'>
                 <Picker.Item
-                  label={nativeLanguage === LANGUAGE_NAMES.EN ? cat.name[LANGUAGE_NAMES.EN] : cat.name[LANGUAGE_NAMES.MG]}
-                  value={cat.id}
-                  key={index}
+                  label={selectGategory}
+                  value=''
+                  style={{color: '#06B6D4'}}
                 />
-              ))}
-            </Picker>
+                {categories.map((cat, index) => (
+                  <Picker.Item
+                    label={cat.name[LANGUAGE_NAMES.EN]}
+                    value={cat.id}
+                    key={index}
+                  />
+                ))}
+              </Picker>
+            </View>
+          </View>
+          <View style={getStyles(HEADING_STYLE, theme)}>
+            <SectionHeading text={addHeadingEnglish} theme={theme} />
+          </View>
+          <View style={{marginBottom: 37}}>
+            <Textarea
+              editable={false}
+              placeholder={inputField}
+              multiline={true}
+              editable={true}
+              phrase={addEnglishPhrase}
+              onChange={value => setAddEnglishPhrase(value)}
+              theme={theme}
+            />
+          </View>
+          <View style={getStyles(HEADING_STYLE, theme)}>
+            <SectionHeading text={addHeadingMalagasy} theme={theme} />
+          </View>
+          <View style={{marginBottom: 37}}>
+            <Textarea
+              editable={false}
+              placeholder={inputField}
+              multiline={true}
+              editable={true}
+              phrase={addMalagasyPhrase}
+              onChange={value => setAddMalagasyPhrase(value)}
+              theme={theme}
+            />
+          </View>
+          <View style={{marginTop: 45}}>
+            <NextButton
+              isDisabled={isButtonEnable}
+              textColor={isButtonEnable ? "#06B6D4" : '#ffffff'}
+              text={addButton}
+              onPress={addPhrasesToSelectedCategory}
+            />
           </View>
         </View>
-        <View style={styles.heading}>
-          <SectionHeading text={addHeadingEnglish} />
-        </View>
-        <View style={{ marginBottom: 37 }}>
-          <Textarea
-            editable={false}
-            placeholder={inputField}
-            multiline={true}
-            editable={true}
-            phrase={addEnglishPhrase}
-            onChange={value => setAddEnglishPhrase(value)}
-          />
-        </View>
-        <View style={styles.heading}>
-          <SectionHeading text={addHeadingMalagasy} />
-        </View>
-        <View style={{ marginBottom: 37 }}>
-          <Textarea
-            editable={false}
-            placeholder={inputField}
-            multiline={true}
-            editable={true}
-            phrase={addMalagasyPhrase}
-            onChange={value => setAddMalagasyPhrase(value)}
-          />
-        </View>
-        <View style={{ marginTop: 45 }}>
-          <NextButton
-            isDisabled={isButtonEnable}
-            textColor={isButtonEnable ? "#06B6D4" : '#ffffff'}
-            text={addButton}
-            onPress={addPhrasesToSelectedCategory}
-          />
-        </View>
-      </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    paddingBottom: 56,
-  },
-  heading: {
-    paddingBottom: 15,
-    flexDirection: 'row',
-  },
   pickerContainer: {
     marginTop: -16,
     height: 50,

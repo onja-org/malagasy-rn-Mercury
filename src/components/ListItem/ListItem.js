@@ -9,7 +9,13 @@ import {
   SectionList,
 } from 'react-native';
 
-export const Separator = () => <View style={styles.separator} />;
+import {
+  getStyles, 
+  LIST_ITEM_TEXT_STYLE, 
+  LIST_SEPARATOR_STYLE
+} from '../../ThemeColor/ThemeColor';
+
+export const Separator = ({theme}) => <View style={getStyles(LIST_SEPARATOR_STYLE, theme)} />;
 const RenderDataItem = ({
   item,
   index,
@@ -21,6 +27,7 @@ const RenderDataItem = ({
   lang,
   randomPhraseId,
   disableAllOptions,
+  theme,
 }) => {
   const showAnswerMode = disableAllOptions === true;
   const isCorrectAnswer = item.id === randomPhraseId;
@@ -59,7 +66,11 @@ const RenderDataItem = ({
       style={styles.item}
       onPress={() => makeAction(item, index)}>
       <View>
-        <Text numberOfLines={1} ellipsizeMode={'tail'} style={styles.text}>
+        <Text 
+          numberOfLines={1} 
+          ellipsizeMode={'tail'} 
+          style={getStyles(LIST_ITEM_TEXT_STYLE, theme)}
+        >
           {lang ? item?.name?.[lang] : item.name}
         </Text>
       </View>
@@ -83,6 +94,7 @@ export default function ListItem({
   lang,
   randomPhraseId,
   disableAllOptions,
+  theme
 }) {
   return (
     <SafeAreaView>
@@ -100,10 +112,11 @@ export default function ListItem({
             lang={lang}
             randomPhraseId={randomPhraseId}
             disableAllOptions={disableAllOptions}
+            theme={theme}
           />
         )}
         keyExtractor={item => item.id}
-        ItemSeparatorComponent={() => <Separator />}
+        ItemSeparatorComponent={() => <Separator theme={theme} />}
       />
     </SafeAreaView>
   );
@@ -118,19 +131,5 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 20,
     paddingVertical: 17,
-  },
-  text: {
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    fontSize: 16,
-    lineHeight: 19,
-    color: '#111827',
-    maxWidth: 320,
-  },
-  separator: {
-    flex: 1,
-    height: 1,
-    backgroundColor: '#E5E5E5',
   },
 });
