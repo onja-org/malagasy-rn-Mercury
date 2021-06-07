@@ -1,4 +1,5 @@
 // // import all of the constants from contants folder
+
 import {
   SET_CATEGORIES,
   SET_PHRASES,
@@ -43,6 +44,8 @@ export function setLanguageName(language) {
     payload: language,
   };
 }
+
+
 
 export function setNewPhrases(phrases) {
   return {

@@ -6,6 +6,7 @@ import {
   categoryPhrasesRoot,
   currentCategoryName,
   learntPhrasesRoot,
+  nativeLanguageRoot,
 } from '../redux/selectors';
 
 function mapStateToProps(state) {
@@ -14,6 +15,7 @@ function mapStateToProps(state) {
     currentCategoryName: currentCategoryName(state),
     learntPhrases: learntPhrasesRoot(state),
     categories: categoriesRoot(state),
+    nativeLanguage: nativeLanguageRoot(state),
   };
 }
 const mapDispatchToProps = {

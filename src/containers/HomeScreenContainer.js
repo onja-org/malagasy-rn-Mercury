@@ -6,6 +6,8 @@ import {
   setCurrentCategory,
   setPhrases,
   synchronizeStorageToRedux,
+  setLearntPhrases,
+  setLanguageName,
 } from '../redux/actions';
 
 import {
@@ -27,6 +29,8 @@ const mapDispatchToProps = {
   setCategories,
   setCurrentCategory,
   setPhrases,
+  setLearntPhrases,
+  setLanguageName,
   synchronizeStorageToRedux,
 };
 
