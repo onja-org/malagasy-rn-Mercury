@@ -1,14 +1,11 @@
 import {connect} from 'react-redux';
 import Adding from '../screens/AddNewTerm';
 import {
-  categoriesRoot, 
+  categoriesRoot,
   nativeLanguageRoot,
-  themeRoot
+  themeRoot,
 } from '../redux/selectors';
-import {
-  addNewPhrase, 
-  setTheme
-} from '../redux/actions';
+import {addNewPhrase, setTheme} from '../redux/actions';
 
 function mapStateToProps(state) {
   return {
@@ -19,7 +16,7 @@ function mapStateToProps(state) {
 }
 const mapDispatchToProps = {
   addNewPhrase,
-  setTheme
+  setTheme,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Adding);

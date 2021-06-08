@@ -49,10 +49,9 @@ export function setLanguageName(language) {
 export function setTheme(theme) {
   return {
     type: SET_THEME,
-    payload: theme
-  }
+    payload: theme,
+  };
 }
-
 
 export function setNewPhrases(phrases) {
   return {
@@ -104,9 +103,10 @@ export function synchronizeStorageToRedux() {
     const storedLearntPhrase = await getData(LEARNT_PHRASES_KEY);
     if (storedUserPhrases) {
       dispatch(setNewPhrases(storedUserPhrases));
-      return Promise.resolve();
-    } else if (storedLearntPhrases) {
+    }
+    if (storedLearntPhrase) {
       dispatch(setLearntPhrases(storedLearntPhrase));
     }
+    return Promise.resolve();
   };
 }

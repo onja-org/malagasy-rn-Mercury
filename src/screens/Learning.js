@@ -8,23 +8,24 @@ import {
 } from 'react-native';
 
 import {
-  toggleTheme, 
-  getStyles, 
-  getFillColor, 
+  toggleTheme,
+  getStyles,
+  getFillColor,
   CONTAINER_STYLE,
   HEADER_STYLE,
   HEADING_STYLE,
-  SECTION_HEADING_TEXT_STYLE
+  SECTION_HEADING_TEXT_STYLE,
 } from '../ThemeColor/ThemeColor';
 
 import {
-  LANG_DATA, CATEGORY_HEADING,
+  LANG_DATA,
+  CATEGORY_HEADING,
   CATEGORY_SUB_HEADING,
   CATEGORY_ANSWEAR_CHOICES,
   CATEGORY_SUB_HEADING_CHOICES,
   NEXT_BUTTON,
   RESHUFELE_BUTTON,
-  ANSWER_VALIDATION
+  ANSWER_VALIDATION,
 } from '../translations';
 
 import List from '../components/List/List';
@@ -37,10 +38,8 @@ import BackIcon from '../components/ToolButton/assets/back.svg';
 import ModeIcon from '../components/ToolButton/assets/mode.svg';
 import LanguageSwitcherContainerEnMg from '../containers/LanguageSwitcherContainerEnMg';
 
-import { LANGUAGE_NAMES } from '../data/dataUtils';
-import { shuffleArray } from '../utils';
-
-
+import {LANGUAGE_NAMES} from '../data/dataUtils';
+import {shuffleArray} from '../utils';
 
 export default ({
   //nav provider
@@ -54,7 +53,7 @@ export default ({
   currentCategoryName,
   theme,
   setTheme,
-  nativeLanguage
+  nativeLanguage,
 }) => {
   const [originalPhrases, setOriginalPhrases] = useState([]);
   const [phrasesLeft, setPhrasesLeft] = useState([]);
@@ -71,7 +70,6 @@ export default ({
   useEffect(() => {
     setOriginalPhrases(categoryPhrases);
     setNewQuestionPhrase(categoryPhrases, categoryPhrases);
-
   }, [categoryPhrases]);
 
   const setAnswerOptionsCallback = (original, current) => {
@@ -83,9 +81,12 @@ export default ({
 
   const selectAnswerCallback = useCallback(
     item => {
-      if (
-        item.id === currentPhrase.id && learntPhrases?.every(phrase => phrase.id !== currentPhrase.id)
-      ) {
+      const isCorrect = item.id === currentPhrase.id;
+
+      const isAlredyinLearnPhrases = learntPhrases.every(
+        phrase => phrase.id !== currentPhrase.id,
+      );
+      if (isCorrect && isAlredyinLearnPhrases) {
         addLearntPhrases(item);
       } else {
         // TODO add to seen
@@ -94,7 +95,7 @@ export default ({
       setDisableAllOptions(true);
 
       const answerOptionsWithSelected = answerOptions.map(phrase => {
-        return { ...phrase, isSelected: phrase.id === item.id };
+        return {...phrase, isSelected: phrase.id === item.id};
       });
       setAnswerOptions(answerOptionsWithSelected);
     },
@@ -130,19 +131,22 @@ export default ({
     setAnswerOptionsCallback(originalAll, newPhrase);
   };
 
-
   const categoryHeading = LANG_DATA[CATEGORY_HEADING][nativeLanguage];
   const categorySubHeading = LANG_DATA[CATEGORY_SUB_HEADING][nativeLanguage];
-  const categoryListChoices = LANG_DATA[CATEGORY_ANSWEAR_CHOICES][nativeLanguage];
-  const categoryHeadingListAnswear = LANG_DATA[CATEGORY_SUB_HEADING_CHOICES][nativeLanguage];
+  const categoryListChoices =
+    LANG_DATA[CATEGORY_ANSWEAR_CHOICES][nativeLanguage];
+  const categoryHeadingListAnswear =
+    LANG_DATA[CATEGORY_SUB_HEADING_CHOICES][nativeLanguage];
   const nextButton = LANG_DATA[NEXT_BUTTON][nativeLanguage];
   const reshuffleButton = LANG_DATA[RESHUFELE_BUTTON][nativeLanguage];
   const answerValidation = LANG_DATA[ANSWER_VALIDATION][nativeLanguage];
 
-
   return (
     <SafeAreaView style={{flex: 1}}>
-      <KeyboardAvoidingView style={{flex: 1}} behavior="padding" style={getStyles(CONTAINER_STYLE, theme)}>
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        behavior="padding"
+        style={getStyles(CONTAINER_STYLE, theme)}>
         <View style={{paddingHorizontal: 35, paddingVertical: 23}}>
           <View style={getStyles(HEADER_STYLE, theme)}>
             <ToolBar
@@ -169,7 +173,7 @@ export default ({
             />
           </View>
           <View style={getStyles(HEADING_STYLE, theme)}>
-            <SectionHeading text={categoryHeading} theme={theme}/>
+            <SectionHeading text={categoryHeading} theme={theme} />
             <Text style={getStyles(SECTION_HEADING_TEXT_STYLE, theme)}>
               {currentCategoryName
                 ? currentCategoryName
@@ -179,21 +183,26 @@ export default ({
           <View style={getStyles(HEADING_STYLE, theme)}>
             <SectionHeading text={categorySubHeading} theme={theme} />
           </View>
-          <View style={{ marginBottom: 37 }}>
+          <View style={{marginBottom: 37}}>
             <Textarea
               theme={theme}
               editable={false}
               phrase={
                 shouldReshuffle
                   ? answerValidation
-                  : nativeLanguage === LANGUAGE_NAMES.MG ? currentPhrase?.name?.[LANGUAGE_NAMES.EN] : currentPhrase?.name?.[LANGUAGE_NAMES.MG]
+                  : nativeLanguage === LANGUAGE_NAMES.MG
+                  ? currentPhrase?.name?.[LANGUAGE_NAMES.EN]
+                  : currentPhrase?.name?.[LANGUAGE_NAMES.MG]
               }
             />
           </View>
           {!shouldReshuffle && Boolean(answerOptions && answerOptions.length) && (
             <View>
               <View style={getStyles(HEADING_STYLE, theme)}>
-                <SectionHeading text={categoryHeadingListAnswear} theme={theme} />
+                <SectionHeading
+                  text={categoryHeadingListAnswear}
+                  theme={theme}
+                />
               </View>
               <List
                 lang={nativeLanguage}
@@ -211,7 +220,7 @@ export default ({
           )}
 
           {disableAllOptions && !shouldReshuffle && (
-            <View style={{ marginTop: 45 }}>
+            <View style={{marginTop: 45}}>
               <NextButton
                 isDisabled={false}
                 textColor={getFillColor(theme)}
@@ -221,7 +230,7 @@ export default ({
             </View>
           )}
           {shouldReshuffle && (
-            <View style={{ marginTop: 45 }}>
+            <View style={{marginTop: 45}}>
               <NextButton
                 isDisabled={false}
                 textColor={getFillColor(theme)}
