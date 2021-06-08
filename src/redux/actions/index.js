@@ -1,5 +1,4 @@
 // // import all of the constants from contants folder
-
 import {
   SET_CATEGORIES,
   SET_PHRASES,
@@ -8,12 +7,14 @@ import {
   SET_THEME,
   SET_NEW_PHRASES,
   SET_LEARNT_PHRASES,
+  SET_SEEN_PHRASES,
 } from '../constants';
 
 import {
   storeData,
   LEARNT_PHRASES_KEY,
   NEW_PHRASES_KEY,
+  SEEN_PHRASES_KEY,
   getData,
 } from '../../utils/storage';
 
@@ -44,6 +45,14 @@ export function setLanguageName(language) {
     type: SET_LANGUAGE_NAME,
     payload: language,
   };
+
+}
+
+export function setSeenPhrases(phrase) {
+  return {
+    type: SET_SEEN_PHRASES,
+    payload: phrase
+  }
 }
 
 export function setTheme(theme) {
@@ -64,6 +73,33 @@ export function setLearntPhrases(learntPhrases) {
   return {
     type: SET_LEARNT_PHRASES,
     payload: learntPhrases,
+  };
+}
+
+
+export function addSeenPhrase(phrase) {
+  return async dispatch => {
+    const storedSeenPhrase = await getData(SEEN_PHRASES_KEY);
+    let dataToStore = null;
+    if (!storedSeenPhrase) {
+      dataToStore = [phrase];
+    } else {
+      dataToStore = [...storedSeenPhrase, phrase];
+    }
+    await storeData(SEEN_PHRASES_KEY, dataToStore);
+    dispatch(setSeenPhrases(dataToStore));
+    return Promise.resolve();
+  };
+}
+
+export function removeCorrectSeenPhrase(phrase) {
+  return async dispatch => {
+    const storedSeenPhrase = await getData(SEEN_PHRASES_KEY);
+    let dataToStore = storedSeenPhrase.filter(phr => phr.id !== phrase.id);
+    await storeData(SEEN_PHRASES_KEY, dataToStore);
+
+    dispatch(setSeenPhrases(dataToStore));
+    return Promise.resolve();
   };
 }
 
@@ -101,12 +137,24 @@ export function synchronizeStorageToRedux() {
   return async dispatch => {
     const storedUserPhrases = await getData(NEW_PHRASES_KEY);
     const storedLearntPhrase = await getData(LEARNT_PHRASES_KEY);
+    const storedSeenPhrases = await getData(SEEN_PHRASES_KEY);
     if (storedUserPhrases) {
       dispatch(setNewPhrases(storedUserPhrases));
     }
     if (storedLearntPhrase) {
       dispatch(setLearntPhrases(storedLearntPhrase));
     }
+    if (storedSeenPhrases) {
+      dispatch(setSeenPhrases(storedSeenPhrases));
+    }
     return Promise.resolve();
   };
+
 }
+
+
+
+
+
+
+

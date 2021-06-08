@@ -9,9 +9,10 @@ import {
   SET_THEME,
   SET_LEARNT_PHRASES,
   SET_NEW_PHRASES,
+  SET_SEEN_PHRASES,
 } from '../constants';
 
-import {LIGHT_THEME} from '../../ThemeColor/ThemeColor';
+import { LIGHT_THEME } from '../../ThemeColor/ThemeColor';
 // categories reducer
 function categories(state = [], action) {
   switch (action.type) {
@@ -72,6 +73,17 @@ function newPhrases(state = [], action) {
       return state;
   }
 }
+// seen phrases reducer
+function seenPhrases(state = [], action) {
+  switch (action.type) {
+    case SET_SEEN_PHRASES:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
+
 
 function learntPhrases(state = [], action) {
   switch (action.type) {
@@ -91,4 +103,5 @@ export default combineReducers({
   theme,
   newPhrases,
   learntPhrases,
+  seenPhrases,
 });

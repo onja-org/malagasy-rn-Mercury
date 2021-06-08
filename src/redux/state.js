@@ -1,5 +1,5 @@
-import {LANGUAGE_NAMES} from '../data/dataUtils';
-import {LIGHT_THEME} from '../ThemeColor/ThemeColor';
+import { LANGUAGE_NAMES } from '../data/dataUtils';
+import { LIGHT_THEME } from '../ThemeColor/ThemeColor';
 
 export default {
   categories: [],
@@ -9,4 +9,5 @@ export default {
   theme: LIGHT_THEME,
   newPhrases: [],
   learntPhrases: [],
+  seenPhrases: [],
 };

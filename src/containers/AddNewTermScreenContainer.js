@@ -1,11 +1,11 @@
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import Adding from '../screens/AddNewTerm';
 import {
   categoriesRoot,
   nativeLanguageRoot,
   themeRoot,
 } from '../redux/selectors';
-import {addNewPhrase, setTheme} from '../redux/actions';
+import { addNewPhrase, setTheme } from '../redux/actions';
 
 function mapStateToProps(state) {
   return {

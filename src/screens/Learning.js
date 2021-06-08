@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Text,
   View,
@@ -38,18 +38,20 @@ import BackIcon from '../components/ToolButton/assets/back.svg';
 import ModeIcon from '../components/ToolButton/assets/mode.svg';
 import LanguageSwitcherContainerEnMg from '../containers/LanguageSwitcherContainerEnMg';
 
-import {LANGUAGE_NAMES} from '../data/dataUtils';
-import {shuffleArray} from '../utils';
+import { LANGUAGE_NAMES } from '../data/dataUtils';
+import { shuffleArray } from '../utils';
 
 export default ({
   //nav provider
   navigation,
-
   //state props
   categories,
   learntPhrases,
+  removeCorrectSeenPhrase,
   addLearntPhrases,
   categoryPhrases,
+  seenPhrases,
+  addSeenPhrase,
   currentCategoryName,
   theme,
   setTheme,
@@ -79,6 +81,12 @@ export default ({
     setAnswerOptions(randomWithCorrect);
   };
 
+  function seenPhraseCategory() {
+    const findCurrentCategory = categories.find(id => id.phrasesIds.includes(currentPhrase?.id))
+    const curentSeenPhraseCategory = findCurrentCategory?.name.en;
+    return curentSeenPhraseCategory
+  }
+
   const selectAnswerCallback = useCallback(
     item => {
       const isCorrect = item.id === currentPhrase.id;
@@ -88,18 +96,20 @@ export default ({
       );
       if (isCorrect && isAlredyinLearnPhrases) {
         addLearntPhrases(item);
+        removeCorrectSeenPhrase(item)
       } else {
-        // TODO add to seen
+        const phraseAlreadyInSeen = seenPhrases?.some(phrase => phrase.id === currentPhrase.id)
+        if (!phraseAlreadyInSeen && !isCorrect) {
+          addSeenPhrase(item)
+        }
       }
-
       setDisableAllOptions(true);
-
       const answerOptionsWithSelected = answerOptions.map(phrase => {
-        return {...phrase, isSelected: phrase.id === item.id};
+        return { ...phrase, isSelected: phrase.id === item.id };
       });
       setAnswerOptions(answerOptionsWithSelected);
     },
-    [currentPhrase, setDisableAllOptions, answerOptions],
+    [currentPhrase, setDisableAllOptions, answerOptions, seenPhrases, learntPhrases],
   );
 
   const nextAnswerCallback = useCallback(() => {
@@ -142,12 +152,12 @@ export default ({
   const answerValidation = LANG_DATA[ANSWER_VALIDATION][nativeLanguage];
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{ flex: 1 }}>
       <KeyboardAvoidingView
-        style={{flex: 1}}
+        style={{ flex: 1 }}
         behavior="padding"
         style={getStyles(CONTAINER_STYLE, theme)}>
-        <View style={{paddingHorizontal: 35, paddingVertical: 23}}>
+        <View style={{ paddingHorizontal: 35, paddingVertical: 23 }}>
           <View style={getStyles(HEADER_STYLE, theme)}>
             <ToolBar
               button={
@@ -177,13 +187,13 @@ export default ({
             <Text style={getStyles(SECTION_HEADING_TEXT_STYLE, theme)}>
               {currentCategoryName
                 ? currentCategoryName
-                : `Learnt phrases/${learntCategory?.name[LANGUAGE_NAMES.EN]}`}
+                : `Learnt phrases/${learntCategory?.name[LANGUAGE_NAMES.EN]}` || `Seen phrases - ${seenPhraseCategory()}`}
             </Text>
           </View>
           <View style={getStyles(HEADING_STYLE, theme)}>
             <SectionHeading text={categorySubHeading} theme={theme} />
           </View>
-          <View style={{marginBottom: 37}}>
+          <View style={{ marginBottom: 37 }}>
             <Textarea
               theme={theme}
               editable={false}
@@ -191,8 +201,8 @@ export default ({
                 shouldReshuffle
                   ? answerValidation
                   : nativeLanguage === LANGUAGE_NAMES.MG
-                  ? currentPhrase?.name?.[LANGUAGE_NAMES.EN]
-                  : currentPhrase?.name?.[LANGUAGE_NAMES.MG]
+                    ? currentPhrase?.name?.[LANGUAGE_NAMES.EN]
+                    : currentPhrase?.name?.[LANGUAGE_NAMES.MG]
               }
             />
           </View>
@@ -218,9 +228,8 @@ export default ({
               />
             </View>
           )}
-
           {disableAllOptions && !shouldReshuffle && (
-            <View style={{marginTop: 45}}>
+            <View style={{ marginTop: 45 }}>
               <NextButton
                 isDisabled={false}
                 textColor={getFillColor(theme)}
@@ -230,7 +239,7 @@ export default ({
             </View>
           )}
           {shouldReshuffle && (
-            <View style={{marginTop: 45}}>
+            <View style={{ marginTop: 45 }}>
               <NextButton
                 isDisabled={false}
                 textColor={getFillColor(theme)}
@@ -241,7 +250,7 @@ export default ({
           )}
         </View>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </SafeAreaView >
   );
 };
 

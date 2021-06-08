@@ -1,8 +1,8 @@
-import React, {useEffect} from 'react';
-import {action} from '@storybook/addon-actions';
-import {getPhrasesForCategoryId, getAllCategories} from '../data/dataUtils';
+import React, { useEffect } from 'react';
+import { action } from '@storybook/addon-actions';
+import { getPhrasesForCategoryId, getAllCategories } from '../data/dataUtils';
 
-import {View, SafeAreaView, KeyboardAvoidingView} from 'react-native';
+import { View, SafeAreaView, KeyboardAvoidingView } from 'react-native';
 
 import {
   toggleTheme,
@@ -49,13 +49,15 @@ export default ({
   setCurrentCategory,
   setPhrases,
   setTheme,
+  seenPhrases,
   synchronizeStorageToRedux,
 }) => {
   useEffect(() => {
     // fetch categories
+    synchronizeStorageToRedux();
     const categories = getAllCategories();
     setCategories(categories);
-    synchronizeStorageToRedux();
+
   }, []);
 
   const openCategoryPhrases = item => {
@@ -91,29 +93,43 @@ export default ({
 
   const openLearntPhrases = item => {
     // Using the learntPhrases in the state
-    setCurrentCategory(item);
+    setCurrentCategory(item.id);
     setPhrases(learntPhrases);
     navigation.navigate('Learn');
   };
 
   // Changing the label of the learnt phrases
-  let wordAndPhrase = '';
-
+  let wordNumberLearntPhrases = '';
   if (learntPhrases?.length > 1) {
-    wordAndPhrase = `${learntPhrases?.length} words and phrases`;
+    wordNumberLearntPhrases = `${learntPhrases?.length} words and phrases`;
   } else if (learntPhrases?.length === 1) {
-    wordAndPhrase = `${learntPhrases?.length} word and phrase`;
+    wordNumberLearntPhrases = `${learntPhrases?.length} word and phrase`;
   } else {
-    wordAndPhrase = 'No word and phrase';
+    wordNumberLearntPhrases = 'No word and phrase';
+  }
+
+  const openSeenPhrase = item => {
+    setCurrentCategory(item.id);
+    setPhrases(seenPhrases)
+    navigation.navigate('Learn');
+  }
+  let wordNumberSeenPhrases = '';
+
+  if (seenPhrases?.length > 1) {
+    wordNumberSeenPhrases = `${seenPhrases?.length} words and phrases`
+  } else if (seenPhrases?.length === 1) {
+    wordNumberSeenPhrases = `${seenPhrases?.length} word and phrase`
+  } else {
+    wordNumberSeenPhrases = `No word and phrase`
   }
 
   return (
     <SafeAreaView>
       <KeyboardAvoidingView
-        style={{flex: 1}}
+        style={{ flex: 1 }}
         behavior="padding"
         style={getStyles(CONTAINER_STYLE, theme)}>
-        <View style={{paddingHorizontal: 35, paddingVertical: 23}}>
+        <View style={{ paddingHorizontal: 35, paddingVertical: 23 }}>
           <View style={getStyles(HEADER_STYLE, theme)}>
             <ToolBar
               button={
@@ -176,19 +192,20 @@ export default ({
             <SectionHeading text={categorySeenPhrasesHeading} theme={theme} />
           </View>
           <List
-            data={[{id: 1, name: categorySeenPhrases}]}
-            text={categoryList}
+            data={[{ id: '###seen-phrases###', name: wordNumberSeenPhrases }]}
+            text={'Learn'}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"
-            makeAction={() => {}}
+            makeAction={openSeenPhrase}
+            disableAllOptions={seenPhrases?.length === 0}
             theme={theme}
           />
           <View style={getStyles(HEADING_STYLE, theme)}>
             <SectionHeading text={categoryLearntPhrasesHeading} theme={theme} />
           </View>
           <List
-            data={[{id: '###learnt-phrases###', name: wordAndPhrase}]}
+            data={[{ id: '###learnt-phrases###', name: wordNumberLearntPhrases }]}
             text={categoryList}
             color="#06B6D4"
             iconType="material-community"
@@ -201,4 +218,4 @@ export default ({
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
-};
+}
