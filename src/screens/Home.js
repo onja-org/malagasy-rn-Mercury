@@ -1,20 +1,13 @@
-import React, { useEffect } from 'react';
-import { action } from '@storybook/addon-actions';
-import {
-  getPhrasesForCategoryId,
-  getAllCategories,
-} from '../data/dataUtils';
+import React, {useEffect} from 'react';
+import {action} from '@storybook/addon-actions';
+import {getPhrasesForCategoryId, getAllCategories} from '../data/dataUtils';
+
+import {View, SafeAreaView, KeyboardAvoidingView} from 'react-native';
 
 import {
-  View,
-  SafeAreaView,
-  KeyboardAvoidingView,
-} from 'react-native';
-
-import {
-  toggleTheme, 
-  getStyles, 
-  getFillColor, 
+  toggleTheme,
+  getStyles,
+  getFillColor,
   CONTAINER_STYLE,
   HEADER_STYLE,
   HEADING_STYLE,
@@ -27,9 +20,8 @@ import {
   CATEGORY_SEEN_PHRASES_HEADING,
   CATEGORY_SEEN_PHRASES,
   CATEGORY_LEARNT_PHRASES_HEADING,
-  CATEGORY_LEARNT_PHRASES
+  CATEGORY_LEARNT_PHRASES,
 } from '../translations';
-
 
 import List from '../components/List/List';
 import SectionHeading from '../components/SectionHeading/SectionHeading';
@@ -40,7 +32,6 @@ import CheckIcon from '../components/ToolButton/assets/check.svg';
 import CheckAllIcon from '../components/ToolButton/assets/check-all.svg';
 import ModeIcon from '../components/ToolButton/assets/mode.svg';
 import LanguageSwitcherContainerEnMg from '../containers/LanguageSwitcherContainerEnMg';
-
 
 export default ({
   //nav provider
@@ -60,14 +51,12 @@ export default ({
   setTheme,
   synchronizeStorageToRedux,
 }) => {
-
   useEffect(() => {
     // fetch categories
     const categories = getAllCategories();
     setCategories(categories);
     synchronizeStorageToRedux();
   }, []);
-
 
   const openCategoryPhrases = item => {
     const categoryId = item.id;
@@ -88,10 +77,13 @@ export default ({
 
   const categoryHeading = LANG_DATA[CATEGORY_HEADING][nativeLanguage];
   const categoryList = LANG_DATA[CATEGORY_LIST][nativeLanguage];
-  const categorySeenPhrasesHeading = LANG_DATA[CATEGORY_SEEN_PHRASES_HEADING][nativeLanguage];
+  const categorySeenPhrasesHeading =
+    LANG_DATA[CATEGORY_SEEN_PHRASES_HEADING][nativeLanguage];
   const categorySeenPhrases = LANG_DATA[CATEGORY_SEEN_PHRASES][nativeLanguage];
-  const categoryLearntPhrasesHeading = LANG_DATA[CATEGORY_LEARNT_PHRASES_HEADING][nativeLanguage];
-  const categoryLearntPhrases = LANG_DATA[CATEGORY_LEARNT_PHRASES][nativeLanguage];
+  const categoryLearntPhrasesHeading =
+    LANG_DATA[CATEGORY_LEARNT_PHRASES_HEADING][nativeLanguage];
+  const categoryLearntPhrases =
+    LANG_DATA[CATEGORY_LEARNT_PHRASES][nativeLanguage];
 
   const openAddingScreen = () => {
     navigation.navigate('Add');
@@ -107,7 +99,6 @@ export default ({
   // Changing the label of the learnt phrases
   let wordAndPhrase = '';
 
-
   if (learntPhrases?.length > 1) {
     wordAndPhrase = `${learntPhrases?.length} words and phrases`;
   } else if (learntPhrases?.length === 1) {
@@ -118,84 +109,94 @@ export default ({
 
   return (
     <SafeAreaView>
-      <KeyboardAvoidingView style={{ flex: 1}}  behavior="padding" style={getStyles(CONTAINER_STYLE, theme)}>
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        behavior="padding"
+        style={getStyles(CONTAINER_STYLE, theme)}>
         <View style={{paddingHorizontal: 35, paddingVertical: 23}}>
           <View style={getStyles(HEADER_STYLE, theme)}>
-              <ToolBar
-                button={
-                  <ToolButton onPress={openAddingScreen}>
-                    <AddIcon width={24} height={24} fill={getFillColor(theme)} />
-                  </ToolButton>
-                }
-              />
-              <ToolBar
-                button={
-                  <LanguageSwitcherContainerEnMg color={getFillColor(theme)} />
-                }
-              />
-              <ToolBar
-                button={
-                  <ToolButton onPress={action('clicked-add-button')}>
-                    <CheckIcon width={24} height={24} fill={getFillColor(theme)} />
-                  </ToolButton>
-                }
-              />
-              <ToolBar
-                button={
-                  <ToolButton 
-                    onPress={openLearntPhrases}
-                    disabled={learntPhrases?.length === 0}
-                  >
-                    <CheckAllIcon width={24} height={24} fill={getFillColor(theme)} />
-                  </ToolButton>
-                }
-              />
-              <ToolBar
-                button={
-                  <ToolButton onPress={() => toggleTheme(setTheme, theme)}>
-                    <ModeIcon width={24} height={24} fill={getFillColor(theme)} />
-                  </ToolButton>
-                }
-              />
-            </View>
-            <View style={getStyles(HEADING_STYLE, theme)}>
-              <SectionHeading text={categoryHeading} theme={theme} />
-            </View>
-            <List
-              lang={nativeLanguage}
-              data={categories}
-              text={categoryList}
-              color="#06B6D4"
-              iconType="material-community"
-              iconName="arrow-right"
-              makeAction={openCategoryPhrases}
-              theme={theme}
+            <ToolBar
+              button={
+                <ToolButton onPress={openAddingScreen}>
+                  <AddIcon width={24} height={24} fill={getFillColor(theme)} />
+                </ToolButton>
+              }
             />
-            <View style={getStyles(HEADING_STYLE, theme)}>
-              <SectionHeading text={categorySeenPhrasesHeading} theme={theme} />
-            </View>
-            <List
-              data={[{id: 1, name: categorySeenPhrases}]}
-              text={categoryList}
-              color="#06B6D4"
-              iconType="material-community"
-              iconName="arrow-right"
-              makeAction={() => {}}
-              theme={theme}
+            <ToolBar
+              button={
+                <LanguageSwitcherContainerEnMg color={getFillColor(theme)} />
+              }
             />
-            <View style={getStyles(HEADING_STYLE, theme)}>
-              <SectionHeading text={categoryLearntPhrasesHeading} theme={theme} />
-            </View>
-            <List
-              data={[{id: '###learnt-phrases###', name: wordAndPhrase}]}
-              text={categoryList}
-              color="#06B6D4"
-              iconType="material-community"
-              iconName="arrow-right"
-              disableAllOptions={learntPhrases === null}
-              makeAction={openLearntPhrases}
-              theme={theme}
+            <ToolBar
+              button={
+                <ToolButton onPress={action('clicked-add-button')}>
+                  <CheckIcon
+                    width={24}
+                    height={24}
+                    fill={getFillColor(theme)}
+                  />
+                </ToolButton>
+              }
             />
+            <ToolBar
+              button={
+                <ToolButton
+                  onPress={openLearntPhrases}
+                  disabled={learntPhrases?.length === 0}>
+                  <CheckAllIcon
+                    width={24}
+                    height={24}
+                    fill={getFillColor(theme)}
+                  />
+                </ToolButton>
+              }
+            />
+            <ToolBar
+              button={
+                <ToolButton onPress={() => toggleTheme(setTheme, theme)}>
+                  <ModeIcon width={24} height={24} fill={getFillColor(theme)} />
+                </ToolButton>
+              }
+            />
+          </View>
+          <View style={getStyles(HEADING_STYLE, theme)}>
+            <SectionHeading text={categoryHeading} theme={theme} />
+          </View>
+          <List
+            lang={nativeLanguage}
+            data={categories}
+            text={categoryList}
+            color="#06B6D4"
+            iconType="material-community"
+            iconName="arrow-right"
+            makeAction={openCategoryPhrases}
+            theme={theme}
+          />
+          <View style={getStyles(HEADING_STYLE, theme)}>
+            <SectionHeading text={categorySeenPhrasesHeading} theme={theme} />
+          </View>
+          <List
+            data={[{id: 1, name: categorySeenPhrases}]}
+            text={categoryList}
+            color="#06B6D4"
+            iconType="material-community"
+            iconName="arrow-right"
+            makeAction={() => {}}
+            theme={theme}
+          />
+          <View style={getStyles(HEADING_STYLE, theme)}>
+            <SectionHeading text={categoryLearntPhrasesHeading} theme={theme} />
+          </View>
+          <List
+            data={[{id: '###learnt-phrases###', name: wordAndPhrase}]}
+            text={categoryList}
+            color="#06B6D4"
+            iconType="material-community"
+            iconName="arrow-right"
+            disableAllOptions={learntPhrases === null}
+            makeAction={openLearntPhrases}
+            theme={theme}
+          />
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>

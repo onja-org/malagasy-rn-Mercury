@@ -1,4 +1,4 @@
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import Home from '../screens/Home';
 
 import {
@@ -13,8 +13,8 @@ import {
 } from '../redux/actions';
 
 import {
-  categoriesRoot, 
-  nativeLanguageRoot, 
+  categoriesRoot,
+  nativeLanguageRoot,
   newPhrasesRoot,
   themeRoot,
   learntPhrasesRoot,

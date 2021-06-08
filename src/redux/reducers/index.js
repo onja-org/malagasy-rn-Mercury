@@ -1,4 +1,4 @@
-import { combineReducers } from 'redux';
+import {combineReducers} from 'redux';
 // import all of constat case name for the swich
 // in reducers
 import {
@@ -42,7 +42,6 @@ function categoryPhrases(state = [], action) {
   }
 }
 
-
 function nativeLanguage(state = '', action) {
   switch (action.type) {
     case SET_LANGUAGE_NAME:
@@ -53,15 +52,15 @@ function nativeLanguage(state = '', action) {
 }
 
 const initialState = {
-  theme: LIGHT_THEME
-}
+  theme: LIGHT_THEME,
+};
 
 function theme(state = initialState, action) {
   switch (action.type) {
-    case SET_THEME: 
+    case SET_THEME:
       return action.payload;
-    default: 
-        return state;
+    default:
+      return state;
   }
 }
 

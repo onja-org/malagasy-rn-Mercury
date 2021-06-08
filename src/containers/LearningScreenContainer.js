@@ -1,18 +1,15 @@
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import Learning from '../screens/Learning';
 import {
-  categoryPhrasesRoot, 
+  categoryPhrasesRoot,
   currentCategoryName,
   themeRoot,
   categoriesRoot,
   learntPhrasesRoot,
-  nativeLanguageRoot
+  nativeLanguageRoot,
 } from '../redux/selectors';
 
-import {
-  setTheme,
-  addLearntPhrases,
-} from '../redux/actions';
+import {setTheme, addLearntPhrases} from '../redux/actions';
 
 function mapStateToProps(state) {
   return {

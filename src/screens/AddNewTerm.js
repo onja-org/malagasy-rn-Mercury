@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import {
-  View, 
-  StyleSheet, 
-  SafeAreaView, 
-  KeyboardAvoidingView
+  View,
+  StyleSheet,
+  SafeAreaView,
+  KeyboardAvoidingView,
 } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import {Picker} from '@react-native-picker/picker';
 import 'react-native-get-random-values';
-import { v4 as uuid } from 'uuid';
+import {v4 as uuid} from 'uuid';
 
 import SectionHeading from '../components/SectionHeading/SectionHeading';
 import ToolBar from '../components/ToolBar/ToolBar';
@@ -19,12 +19,12 @@ import BackIcon from '../components/ToolButton/assets/back.svg';
 import ModeIcon from '../components/ToolButton/assets/mode.svg';
 import LanguageSwitcherContainerEnMg from '../containers/LanguageSwitcherContainerEnMg';
 
-import { LANGUAGE_NAMES } from '../data/dataUtils';
+import {LANGUAGE_NAMES} from '../data/dataUtils';
 
 import {
-  toggleTheme, 
-  getStyles, 
-  getFillColor, 
+  toggleTheme,
+  getStyles,
+  getFillColor,
   CONTAINER_STYLE,
   HEADER_STYLE,
   HEADING_STYLE,
@@ -40,8 +40,14 @@ import {
   ADD_BUTTON,
 } from '../translations';
 
-export default ({ navigation, categories, addNewPhrase, nativeLanguage, theme, 
-    setTheme }) => {
+export default ({
+  navigation,
+  categories,
+  addNewPhrase,
+  nativeLanguage,
+  theme,
+  setTheme,
+}) => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [addEnglishPhrase, setAddEnglishPhrase] = useState('');
   const [addMalagasyPhrase, setAddMalagasyPhrase] = useState('');
@@ -54,7 +60,6 @@ export default ({ navigation, categories, addNewPhrase, nativeLanguage, theme,
   const onChangeValue = itemValue => {
     setSelectedCategory(itemValue);
   };
-
 
   const addPhrasesToSelectedCategory = () => {
     const newPhrase = {
@@ -72,14 +77,19 @@ export default ({ navigation, categories, addNewPhrase, nativeLanguage, theme,
 
   const categoryHeading = LANG_DATA[CATEGORY_HEADING][nativeLanguage];
   const selectGategory = LANG_DATA[SELECT_CATEGORY][nativeLanguage];
-  const addHeadingEnglish = LANG_DATA[ADD_SECTION_HAEDING_E_ENGLISH][nativeLanguage];
+  const addHeadingEnglish =
+    LANG_DATA[ADD_SECTION_HAEDING_E_ENGLISH][nativeLanguage];
   const inputField = LANG_DATA[ADD_ENTER_INPUTFIELD][nativeLanguage];
-  const addHeadingMalagasy = LANG_DATA[ADD_SECTION_HAEDING_MALAGASY][nativeLanguage]
-  const addButton = LANG_DATA[ADD_BUTTON][nativeLanguage]
+  const addHeadingMalagasy =
+    LANG_DATA[ADD_SECTION_HAEDING_MALAGASY][nativeLanguage];
+  const addButton = LANG_DATA[ADD_BUTTON][nativeLanguage];
 
   return (
     <SafeAreaView>
-      <KeyboardAvoidingView style={{flex: 1}} behavior="padding" style={getStyles(CONTAINER_STYLE, theme)}>
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        behavior="padding"
+        style={getStyles(CONTAINER_STYLE, theme)}>
         <View style={{paddingHorizontal: 35, paddingVertical: 23}}>
           <View style={getStyles(HEADER_STYLE, theme)}>
             <ToolBar
@@ -112,10 +122,10 @@ export default ({ navigation, categories, addNewPhrase, nativeLanguage, theme,
                 selectedValue={selectedCategory}
                 style={styles.pickerContent}
                 onValueChange={onChangeValue}
-                dropdownIconColor='#06B6D4'>
+                dropdownIconColor="#06B6D4">
                 <Picker.Item
                   label={selectGategory}
-                  value=''
+                  value=""
                   style={{color: '#06B6D4'}}
                 />
                 {categories.map((cat, index) => (
@@ -159,7 +169,7 @@ export default ({ navigation, categories, addNewPhrase, nativeLanguage, theme,
           <View style={{marginTop: 45}}>
             <NextButton
               isDisabled={isButtonEnable}
-              textColor={isButtonEnable ? "#06B6D4" : '#ffffff'}
+              textColor={isButtonEnable ? '#06B6D4' : '#ffffff'}
               text={addButton}
               onPress={addPhrasesToSelectedCategory}
             />
