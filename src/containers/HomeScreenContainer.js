@@ -18,6 +18,7 @@ import {
   newPhrasesRoot,
   themeRoot,
   learntPhrasesRoot,
+  seenPhrasesRoot
 } from '../redux/selectors';
 
 function mapStateToProps(state) {
@@ -27,6 +28,7 @@ function mapStateToProps(state) {
     theme: themeRoot(state),
     newPhrases: newPhrasesRoot(state),
     learntPhrases: learntPhrasesRoot(state),
+    seenPhrases: seenPhrasesRoot(state),
   };
 }
 const mapDispatchToProps = {

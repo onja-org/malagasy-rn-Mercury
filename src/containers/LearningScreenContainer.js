@@ -1,5 +1,14 @@
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import Learning from '../screens/Learning';
+import {
+  setLearntPhrases,
+  addLearntPhrases,
+  setSeenPhrases,
+  addSeenPhrase,
+  setCategories,
+  removeCorrectSeenPhrase,
+  setTheme,
+} from '../redux/actions/index';
 import {
   categoryPhrasesRoot,
   currentCategoryName,
@@ -7,9 +16,9 @@ import {
   categoriesRoot,
   learntPhrasesRoot,
   nativeLanguageRoot,
+  seenPhrasesRoot
 } from '../redux/selectors';
 
-import {setTheme, addLearntPhrases} from '../redux/actions';
 
 function mapStateToProps(state) {
   return {
@@ -19,12 +28,18 @@ function mapStateToProps(state) {
     learntPhrases: learntPhrasesRoot(state),
     categories: categoriesRoot(state),
     nativeLanguage: nativeLanguageRoot(state),
+    seenPhrases: seenPhrasesRoot(state),
   };
 }
 
 const mapDispatchToProps = {
-  setTheme,
+  setLearntPhrases,
   addLearntPhrases,
+  setSeenPhrases,
+  addSeenPhrase,
+  setTheme,
+  setCategories,
+  removeCorrectSeenPhrase,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Learning);
