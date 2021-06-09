@@ -1,8 +1,7 @@
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import Home from '../screens/Home';
 
 import {
-  setCategories,
   setCurrentCategory,
   setPhrases,
   setTheme,
@@ -10,6 +9,8 @@ import {
   addLearntPhrases,
   synchronizeStorageToRedux,
   setLanguageName,
+  getCategoriesAndUpdateRedux,
+  setCombinedPhrases
 } from '../redux/actions';
 
 import {
@@ -32,7 +33,6 @@ function mapStateToProps(state) {
   };
 }
 const mapDispatchToProps = {
-  setCategories,
   setCurrentCategory,
   setPhrases,
   setTheme,
@@ -40,6 +40,8 @@ const mapDispatchToProps = {
   addLearntPhrases,
   setLanguageName,
   synchronizeStorageToRedux,
+  getCategoriesAndUpdateRedux,
+  setCombinedPhrases,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
