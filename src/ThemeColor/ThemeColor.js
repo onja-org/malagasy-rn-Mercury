@@ -109,7 +109,6 @@ export const TEXTAREA_STYLE = 'textarea';
 export const INPUT_STYLE = 'input';
 export const TEXT_TEXTAREA_CONTAINER_STYLE = 'textTextareaContainer';
 
-
 export const toggleTheme = (setTheme, theme) => {
     const newThemeMode = theme === LIGHT_THEME ? DARK_THEME : LIGHT_THEME;
     setTheme(newThemeMode);
