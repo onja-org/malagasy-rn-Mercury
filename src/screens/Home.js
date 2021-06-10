@@ -1,3 +1,4 @@
+
 import React, {useEffect} from 'react';
 import {action} from '@storybook/addon-actions';
 import {getPhrasesForCategoryId, getAllCategories} from '../data/dataUtils';
@@ -30,7 +31,7 @@ import AddIcon from '../components/ToolButton/assets/add.svg';
 import CheckIcon from '../components/ToolButton/assets/check.svg';
 import CheckAllIcon from '../components/ToolButton/assets/check-all.svg';
 import ModeIcon from '../components/ToolButton/assets/mode.svg';
-import LanguageSwitcherContainerEnMg from '../containers/LanguageSwitcherContainerEnMg';
+import LanguageSwitcherContainerEnMg from '../containers/LanguageSwitcherContainerEnMg'
 
 export default ({
   //nav provider
@@ -51,7 +52,7 @@ export default ({
   setCategories,
   synchronizeStorageToRedux,
   getCategoriesAndUpdateRedux,
-  setCombinedPhrases,
+  setCombinedPhrases
 }) => {
   useEffect(() => {
     // fetch categories
@@ -67,8 +68,7 @@ export default ({
     const userPhrasesForCategory = newPhrases.filter(
       phrase => phrase.catId === categoryId,
     );
-
-    setCombinedPhrases(userPhrasesForCategory, categoryId, navigateToLearn);
+    setCombinedPhrases(userPhrasesForCategory, categoryId, navigateToLearn)
   };
 
   const navigateToLearn = () => navigation.navigate('Learn');

@@ -103,5 +103,6 @@ export const LANG_DATA = {
   [CLOSE_BUTTON_TEXT]: {
     [LANGUAGE_NAMES.EN]: 'Close',
     [LANGUAGE_NAMES.MG]: 'Akatony',
-  },
+
+  }
 };

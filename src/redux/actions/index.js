@@ -9,8 +9,7 @@ import {
   SET_LEARNT_PHRASES,
   SET_SEEN_PHRASES,
 } from '../constants';
-import {getPhrasesForCategoryId, getAllCategories} from '../../data/dataUtils';
-
+import { getPhrasesForCategoryId, getAllCategories } from '../../data/dataUtils';
 import {
   storeData,
   LEARNT_PHRASES_KEY,
@@ -170,11 +169,23 @@ export function getCategoriesAndUpdateRedux() {
   };
 }
 
+
 export function setCombinedPhrases(
   userPhrasesForCategory,
   categoryId,
   navigateToLearn,
 ) {
+
+export function getCategoriesAndUpdateRedux() {
+  return async dispatch => {
+    const categories = await getAllCategories();
+    dispatch(setCategories(categories));
+    return Promise.resolve();
+  }
+
+}
+  
+export function setCombinedPhrases(userPhrasesForCategory, categoryId, navigateToLearn) {
   return async dispatch => {
     const phrasesForCategory = await getPhrasesForCategoryId(categoryId);
     const combinedPhrasesForCategory = [
@@ -185,6 +196,7 @@ export function setCombinedPhrases(
     dispatch(setPhrases(combinedPhrasesForCategory));
     navigateToLearn();
     return Promise.resolve();
-  };
+  }
+
 }
-// AsyncStorage.clear();
+
