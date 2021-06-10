@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
 import {
   View,
+  Text,
   StyleSheet,
   SafeAreaView,
   KeyboardAvoidingView,
+  TouchableOpacity
 } from 'react-native';
-import {Picker} from '@react-native-picker/picker';
 import 'react-native-get-random-values';
 import {v4 as uuid} from 'uuid';
 
@@ -14,12 +15,12 @@ import ToolBar from '../components/ToolBar/ToolBar';
 import Textarea from '../components/Textarea/Textarea';
 import NextButton from '../components/NextButton/NextButton';
 import ToolButton from '../components/ToolButton/ToolButton';
-import LanguageSwitcher from '../components/LanguageSwitcher/LanguageSwitcher';
 import BackIcon from '../components/ToolButton/assets/back.svg';
 import ModeIcon from '../components/ToolButton/assets/mode.svg';
 import LanguageSwitcherContainerEnMg from '../containers/LanguageSwitcherContainerEnMg';
+import List from '../components/List/List';
 
-import {LANGUAGE_NAMES} from '../data/dataUtils';
+import DropdownArrow from '../components/ToolButton/assets/triangle-icon.svg';
 
 import {
   toggleTheme,
@@ -33,11 +34,11 @@ import {
 import {
   LANG_DATA,
   CATEGORY_HEADING,
-  SELECT_CATEGORY,
   ADD_SECTION_HAEDING_E_ENGLISH,
   ADD_ENTER_INPUTFIELD,
   ADD_SECTION_HAEDING_MALAGASY,
   ADD_BUTTON,
+  SELECTED_CATEGORY_HEADING,
 } from '../translations';
 
 export default ({
@@ -48,22 +49,26 @@ export default ({
   theme,
   setTheme,
 }) => {
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState({});
   const [addEnglishPhrase, setAddEnglishPhrase] = useState('');
   const [addMalagasyPhrase, setAddMalagasyPhrase] = useState('');
+  const [isCategoryListOpen, setIsCategoryListOpen] = useState(false);
+  const [categoryId, setCategoryId] = useState('');
 
   const isButtonEnable =
     addEnglishPhrase === '' ||
     addMalagasyPhrase === '' ||
-    selectedCategory === '';
+    categoryId === '';
 
-  const onChangeValue = itemValue => {
+  const selectCategory = itemValue => {
     setSelectedCategory(itemValue);
+    setCategoryId(itemValue?.id);
+    setIsCategoryListOpen(false); 
   };
 
   const addPhrasesToSelectedCategory = () => {
     const newPhrase = {
-      catId: selectedCategory,
+      catId: categoryId,
       id: uuid(),
       name: {
         en: addEnglishPhrase,
@@ -73,16 +78,18 @@ export default ({
     addNewPhrase(newPhrase);
     setAddEnglishPhrase('');
     setAddMalagasyPhrase('');
+    setSelectedCategory({});
+    setCategoryId('');
   };
 
   const categoryHeading = LANG_DATA[CATEGORY_HEADING][nativeLanguage];
-  const selectGategory = LANG_DATA[SELECT_CATEGORY][nativeLanguage];
   const addHeadingEnglish =
     LANG_DATA[ADD_SECTION_HAEDING_E_ENGLISH][nativeLanguage];
   const inputField = LANG_DATA[ADD_ENTER_INPUTFIELD][nativeLanguage];
   const addHeadingMalagasy =
     LANG_DATA[ADD_SECTION_HAEDING_MALAGASY][nativeLanguage];
   const addButton = LANG_DATA[ADD_BUTTON][nativeLanguage];
+  const selectCategoryHeading = LANG_DATA[SELECTED_CATEGORY_HEADING][nativeLanguage];
 
   return (
     <SafeAreaView>
@@ -117,26 +124,35 @@ export default ({
           </View>
           <View style={getStyles(HEADING_STYLE, theme)}>
             <SectionHeading text={categoryHeading} theme={theme} />
-            <View style={styles.pickerContainer}>
-              <Picker
-                selectedValue={selectedCategory}
-                style={styles.pickerContent}
-                onValueChange={onChangeValue}
-                dropdownIconColor="#06B6D4">
-                <Picker.Item
-                  label={selectGategory}
-                  value=""
-                  style={{color: '#06B6D4'}}
+            <TouchableOpacity
+              style={styles.select}
+              onPress={() => setIsCategoryListOpen(!isCategoryListOpen)}
+            >
+              <Text
+                numberOfLines={1}
+                ellipsizeMode={"tail"}
+                style={styles.labelSelect}
+              >
+                {
+                  !selectedCategory?.name 
+                    ? selectCategoryHeading 
+                    : selectedCategory?.name[nativeLanguage]
+                }
+              </Text>
+              <View style={styles.dropdownIcon}>
+                <DropdownArrow weight={11} height={11} />
+              </View>
+            </TouchableOpacity>
+            {isCategoryListOpen && (
+              <View style={styles.dropdownSelect}>
+                <List 
+                  data={categories}
+                  lang={nativeLanguage}
+                  makeAction={selectCategory}
+                  theme={theme}
                 />
-                {categories.map((cat, index) => (
-                  <Picker.Item
-                    label={cat.name[LANGUAGE_NAMES.EN]}
-                    value={cat.id}
-                    key={index}
-                  />
-                ))}
-              </Picker>
-            </View>
+              </View>
+            )}
           </View>
           <View style={getStyles(HEADING_STYLE, theme)}>
             <SectionHeading text={addHeadingEnglish} theme={theme} />
@@ -181,12 +197,28 @@ export default ({
 };
 
 const styles = StyleSheet.create({
-  pickerContainer: {
-    marginTop: -16,
-    height: 50,
-    width: 200,
+  select: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    zIndex: 1,
   },
-  pickerContent: {
+  labelSelect: {
+    fontWeight: '600',
+    fontSize: 18,
     color: '#06B6D4',
+    marginTop: -16,
+    marginLeft: 16
+  },
+  dropdownSelect: {
+    zIndex: 3,
+    position: 'absolute',
+    top: 24,
+    padding: -32,
+    width: '100%',
+  },
+  dropdownIcon: {
+    marginLeft: 16,
+    marginTop: -12
   },
 });

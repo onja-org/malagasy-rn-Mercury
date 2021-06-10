@@ -1,4 +1,4 @@
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import Learning from '../screens/Learning';
 import {
   setLearntPhrases,
@@ -7,6 +7,7 @@ import {
   addSeenPhrase,
   setCategories,
   removeCorrectSeenPhrase,
+  removeWrongLearntPhrase,
   setTheme,
 } from '../redux/actions/index';
 import {
@@ -16,9 +17,8 @@ import {
   categoriesRoot,
   learntPhrasesRoot,
   nativeLanguageRoot,
-  seenPhrasesRoot
+  seenPhrasesRoot,
 } from '../redux/selectors';
-
 
 function mapStateToProps(state) {
   return {
@@ -40,6 +40,7 @@ const mapDispatchToProps = {
   setTheme,
   setCategories,
   removeCorrectSeenPhrase,
+  removeWrongLearntPhrase,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Learning);

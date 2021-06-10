@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
-import { action } from '@storybook/addon-actions';
-import { getPhrasesForCategoryId, getAllCategories } from '../data/dataUtils';
-
-import { View, SafeAreaView, KeyboardAvoidingView } from 'react-native';
+import React, {useEffect} from 'react';
+import {action} from '@storybook/addon-actions';
+import {getPhrasesForCategoryId, getAllCategories} from '../data/dataUtils';
+import {View, SafeAreaView, KeyboardAvoidingView} from 'react-native';
 
 import {
   toggleTheme,
@@ -15,12 +14,12 @@ import {
 
 import {
   LANG_DATA,
+  NO_PHRASE_TEXT,
   CATEGORY_HEADING,
   CATEGORY_LIST,
   CATEGORY_SEEN_PHRASES_HEADING,
-  CATEGORY_SEEN_PHRASES,
   CATEGORY_LEARNT_PHRASES_HEADING,
-  CATEGORY_LEARNT_PHRASES,
+  CATEGORY_LEARNT_AND_SEEN_PHRASES,
 } from '../translations';
 
 import List from '../components/List/List';
@@ -45,47 +44,46 @@ export default ({
   theme,
 
   //actions
-  setCategories,
   setCurrentCategory,
   setPhrases,
   setTheme,
   seenPhrases,
+  setCategories,
   synchronizeStorageToRedux,
+  getCategoriesAndUpdateRedux,
+  setCombinedPhrases,
 }) => {
   useEffect(() => {
     // fetch categories
     synchronizeStorageToRedux();
     const categories = getAllCategories();
     setCategories(categories);
-
+    getCategoriesAndUpdateRedux();
   }, []);
 
-  const openCategoryPhrases = item => {
+  const openCategoryPhrases = async item => {
     const categoryId = item.id;
     setCurrentCategory(categoryId);
-    // fetch Phrases for category
-    const phrasesForCategory = getPhrasesForCategoryId(categoryId);
     const userPhrasesForCategory = newPhrases.filter(
       phrase => phrase.catId === categoryId,
     );
-    const combinedPhrasesForCategory = [
-      ...phrasesForCategory,
-      ...userPhrasesForCategory,
-    ];
-    setPhrases(combinedPhrasesForCategory);
 
-    navigation.navigate('Learn');
+    setCombinedPhrases(userPhrasesForCategory, categoryId, navigateToLearn);
   };
+
+  const navigateToLearn = () => navigation.navigate('Learn');
 
   const categoryHeading = LANG_DATA[CATEGORY_HEADING][nativeLanguage];
   const categoryList = LANG_DATA[CATEGORY_LIST][nativeLanguage];
   const categorySeenPhrasesHeading =
     LANG_DATA[CATEGORY_SEEN_PHRASES_HEADING][nativeLanguage];
-  const categorySeenPhrases = LANG_DATA[CATEGORY_SEEN_PHRASES][nativeLanguage];
+
   const categoryLearntPhrasesHeading =
     LANG_DATA[CATEGORY_LEARNT_PHRASES_HEADING][nativeLanguage];
-  const categoryLearntPhrases =
-    LANG_DATA[CATEGORY_LEARNT_PHRASES][nativeLanguage];
+  const categoryLearntAndSeenPhrases =
+    LANG_DATA[CATEGORY_LEARNT_AND_SEEN_PHRASES][nativeLanguage];
+
+  const noWordAndPhraseText = LANG_DATA[NO_PHRASE_TEXT][nativeLanguage];
 
   const openAddingScreen = () => {
     navigation.navigate('Add');
@@ -93,43 +91,49 @@ export default ({
 
   const openLearntPhrases = item => {
     // Using the learntPhrases in the state
-    setCurrentCategory(item.id);
+    setCurrentCategory(item);
     setPhrases(learntPhrases);
     navigation.navigate('Learn');
   };
 
   // Changing the label of the learnt phrases
-  let wordNumberLearntPhrases = '';
+  let wordAndPhrase = '';
   if (learntPhrases?.length > 1) {
-    wordNumberLearntPhrases = `${learntPhrases?.length} words and phrases`;
+    wordAndPhrase =
+      nativeLanguage === 'en'
+        ? `${learntPhrases?.length} ${categoryLearntAndSeenPhrases}`
+        : `${categoryLearntAndSeenPhrases} ${learntPhrases?.length}`;
   } else if (learntPhrases?.length === 1) {
-    wordNumberLearntPhrases = `${learntPhrases?.length} word and phrase`;
+    wordAndPhrase =
+      nativeLanguage === 'en'
+        ? `${learntPhrases?.length} word and phrase`
+        : `${categoryLearntAndSeenPhrases} ${learntPhrases?.length}`;
   } else {
-    wordNumberLearntPhrases = 'No word and phrase';
+    wordAndPhrase = noWordAndPhraseText;
   }
 
   const openSeenPhrase = item => {
     setCurrentCategory(item.id);
-    setPhrases(seenPhrases)
+    setPhrases(seenPhrases);
     navigation.navigate('Learn');
-  }
+  };
   let wordNumberSeenPhrases = '';
 
   if (seenPhrases?.length > 1) {
-    wordNumberSeenPhrases = `${seenPhrases?.length} words and phrases`
+    wordNumberSeenPhrases = `${seenPhrases?.length} words and phrases`;
   } else if (seenPhrases?.length === 1) {
-    wordNumberSeenPhrases = `${seenPhrases?.length} word and phrase`
+    wordNumberSeenPhrases = `${seenPhrases?.length} word and phrase`;
   } else {
-    wordNumberSeenPhrases = `No word and phrase`
+    wordNumberSeenPhrases = `No word and phrase`;
   }
 
   return (
     <SafeAreaView>
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
+        style={{flex: 1}}
         behavior="padding"
         style={getStyles(CONTAINER_STYLE, theme)}>
-        <View style={{ paddingHorizontal: 35, paddingVertical: 23 }}>
+        <View style={{paddingHorizontal: 35, paddingVertical: 23}}>
           <View style={getStyles(HEADER_STYLE, theme)}>
             <ToolBar
               button={
@@ -192,7 +196,7 @@ export default ({
             <SectionHeading text={categorySeenPhrasesHeading} theme={theme} />
           </View>
           <List
-            data={[{ id: '###seen-phrases###', name: wordNumberSeenPhrases }]}
+            data={[{id: '###seen-phrases###', name: wordNumberSeenPhrases}]}
             text={'Learn'}
             color="#06B6D4"
             iconType="material-community"
@@ -205,12 +209,12 @@ export default ({
             <SectionHeading text={categoryLearntPhrasesHeading} theme={theme} />
           </View>
           <List
-            data={[{ id: '###learnt-phrases###', name: wordNumberLearntPhrases }]}
+            data={[{id: '###learnt-phrases###', name: wordAndPhrase}]}
             text={categoryList}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"
-            disableAllOptions={learntPhrases === null}
+            disableAllOptions={learntPhrases?.length === 0}
             makeAction={openLearntPhrases}
             theme={theme}
           />
@@ -218,4 +222,4 @@ export default ({
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
-}
+};

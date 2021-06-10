@@ -2,14 +2,16 @@ import {connect} from 'react-redux';
 import Home from '../screens/Home';
 
 import {
-  setCategories,
   setCurrentCategory,
   setPhrases,
   setTheme,
+  setCategories,
   setLearntPhrases,
   addLearntPhrases,
   synchronizeStorageToRedux,
   setLanguageName,
+  getCategoriesAndUpdateRedux,
+  setCombinedPhrases,
 } from '../redux/actions';
 
 import {
@@ -18,7 +20,7 @@ import {
   newPhrasesRoot,
   themeRoot,
   learntPhrasesRoot,
-  seenPhrasesRoot
+  seenPhrasesRoot,
 } from '../redux/selectors';
 
 function mapStateToProps(state) {
@@ -32,14 +34,16 @@ function mapStateToProps(state) {
   };
 }
 const mapDispatchToProps = {
-  setCategories,
   setCurrentCategory,
   setPhrases,
   setTheme,
+  setCategories,
   setLearntPhrases,
   addLearntPhrases,
   setLanguageName,
   synchronizeStorageToRedux,
+  getCategoriesAndUpdateRedux,
+  setCombinedPhrases,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
