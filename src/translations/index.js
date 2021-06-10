@@ -17,6 +17,8 @@ export const ADD_BUTTON = 'ADD_BUTTON';
 export const NEXT_BUTTON = 'NEXT_BUTTON';
 export const RESHUFELE_BUTTON = 'RESHUFELE_BUTTON';
 export const ANSWER_VALIDATION = 'ANSWER_VALIDATION';
+export const SELECTED_CATEGORY_HEADING = 'SELECTED_CATEGORY_HEADING';
+export const CLOSE_BUTTON_TEXT = 'CLOSE_BUTTON';
 
 export const LANG_DATA = {
   [CATEGORY_HEADING]: {
@@ -90,4 +92,12 @@ export const LANG_DATA = {
     [LANGUAGE_NAMES.MG]:
       "Efa voavalinao daholo ny fanontaniana amin'ity sokajy ity.",
   },
+  [SELECTED_CATEGORY_HEADING]: {
+    [LANGUAGE_NAMES.EN]: 'Select a category',
+    [LANGUAGE_NAMES.MG]: 'Misafidiana sokajy',
+  },
+  [CLOSE_BUTTON_TEXT]: {
+    [LANGUAGE_NAMES.EN]: 'Close',
+    [LANGUAGE_NAMES.MG]: 'Akatony',
+  }
 };
