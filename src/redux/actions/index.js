@@ -9,7 +9,7 @@ import {
   SET_LEARNT_PHRASES,
   SET_SEEN_PHRASES,
 } from '../constants';
-
+import {getPhrasesForCategoryId, getAllCategories} from '../../data/dataUtils';
 import {
   storeData,
   LEARNT_PHRASES_KEY,
@@ -45,14 +45,13 @@ export function setLanguageName(language) {
     type: SET_LANGUAGE_NAME,
     payload: language,
   };
-
 }
 
 export function setSeenPhrases(phrase) {
   return {
     type: SET_SEEN_PHRASES,
-    payload: phrase
-  }
+    payload: phrase,
+  };
 }
 
 export function setTheme(theme) {
@@ -76,7 +75,6 @@ export function setLearntPhrases(learntPhrases) {
   };
 }
 
-
 export function addSeenPhrase(phrase) {
   return async dispatch => {
     const storedSeenPhrase = await getData(SEEN_PHRASES_KEY);
@@ -99,6 +97,17 @@ export function removeCorrectSeenPhrase(phrase) {
     await storeData(SEEN_PHRASES_KEY, dataToStore);
 
     dispatch(setSeenPhrases(dataToStore));
+    return Promise.resolve();
+  };
+}
+
+export function removeWrongLearntPhrase(phrase) {
+  return async dispatch => {
+    const storedLearntPhrase = await getData(LEARNT_PHRASES_KEY);
+    let dataToStore = storedLearntPhrase.filter(phr => phr.id !== phrase.id);
+    await storeData(LEARNT_PHRASES_KEY, dataToStore);
+
+    dispatch(setLearntPhrases(dataToStore));
     return Promise.resolve();
   };
 }
@@ -149,12 +158,30 @@ export function synchronizeStorageToRedux() {
     }
     return Promise.resolve();
   };
-
 }
 
+export function getCategoriesAndUpdateRedux() {
+  return async dispatch => {
+    const categories = await getAllCategories();
+    dispatch(setCategories(categories));
+    return Promise.resolve();
+  };
+}
 
+export function setCombinedPhrases(
+  userPhrasesForCategory,
+  categoryId,
+  navigateToLearn,
+) {
+  return async dispatch => {
+    const phrasesForCategory = await getPhrasesForCategoryId(categoryId);
+    const combinedPhrasesForCategory = [
+      ...phrasesForCategory,
+      ...userPhrasesForCategory,
+    ];
 
-
-
-
-
+    dispatch(setPhrases(combinedPhrasesForCategory));
+    navigateToLearn();
+    return Promise.resolve();
+  };
+}
