@@ -5,6 +5,7 @@ import {
   setCurrentCategory,
   setPhrases,
   setTheme,
+  setCategories,
   setLearntPhrases,
   addLearntPhrases,
   synchronizeStorageToRedux,
@@ -19,7 +20,7 @@ import {
   newPhrasesRoot,
   themeRoot,
   learntPhrasesRoot,
-  seenPhrasesRoot
+  seenPhrasesRoot,
 } from '../redux/selectors';
 
 function mapStateToProps(state) {
@@ -36,6 +37,7 @@ const mapDispatchToProps = {
   setCurrentCategory,
   setPhrases,
   setTheme,
+  setCategories,
   setLearntPhrases,
   addLearntPhrases,
   setLanguageName,
