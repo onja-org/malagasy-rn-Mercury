@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { action } from '@storybook/addon-actions';
-import { getPhrasesForCategoryId, getAllCategories } from '../data/dataUtils';
+
+
 
 import { View, SafeAreaView, KeyboardAvoidingView } from 'react-native';
 
@@ -31,7 +32,7 @@ import AddIcon from '../components/ToolButton/assets/add.svg';
 import CheckIcon from '../components/ToolButton/assets/check.svg';
 import CheckAllIcon from '../components/ToolButton/assets/check-all.svg';
 import ModeIcon from '../components/ToolButton/assets/mode.svg';
-import LanguageSwitcherContainerEnMg from '../containers/LanguageSwitcherContainerEnMg';
+import LanguageSwitcherContainerEnMg from '../containers/LanguageSwitcherContainerEnMg'
 
 export default ({
   //nav provider
@@ -45,37 +46,33 @@ export default ({
   theme,
 
   //actions
-  setCategories,
   setCurrentCategory,
   setPhrases,
   setTheme,
   seenPhrases,
   synchronizeStorageToRedux,
+  getCategoriesAndUpdateRedux,
+  setCombinedPhrases
 }) => {
   useEffect(() => {
     // fetch categories
     synchronizeStorageToRedux();
-    const categories = getAllCategories();
-    setCategories(categories);
+    getCategoriesAndUpdateRedux()
 
   }, []);
 
-  const openCategoryPhrases = item => {
+  const openCategoryPhrases = async item => {
     const categoryId = item.id;
     setCurrentCategory(categoryId);
-    // fetch Phrases for category
-    const phrasesForCategory = getPhrasesForCategoryId(categoryId);
     const userPhrasesForCategory = newPhrases.filter(
       phrase => phrase.catId === categoryId,
     );
-    const combinedPhrasesForCategory = [
-      ...phrasesForCategory,
-      ...userPhrasesForCategory,
-    ];
-    setPhrases(combinedPhrasesForCategory);
 
-    navigation.navigate('Learn');
+    setCombinedPhrases(userPhrasesForCategory, categoryId, navigateToLearn)
   };
+
+  const navigateToLearn = () => navigation.navigate('Learn');
+
 
   const categoryHeading = LANG_DATA[CATEGORY_HEADING][nativeLanguage];
   const categoryList = LANG_DATA[CATEGORY_LIST][nativeLanguage];
