@@ -1,8 +1,8 @@
 import React from 'react';
 import ListItem from '../ListItem/ListItem';
-import {View, SafeAreaView} from 'react-native';
+import { View, SafeAreaView } from 'react-native';
 
-import {getStyles, LIST_STYLE} from '../../ThemeColor/ThemeColor';
+import { getStyles, LIST_STYLE } from '../../ThemeColor/ThemeColor';
 
 export default function List({
   data,
