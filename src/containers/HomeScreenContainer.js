@@ -1,4 +1,4 @@
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import Home from '../screens/Home';
 
 import {
@@ -11,7 +11,11 @@ import {
   synchronizeStorageToRedux,
   setLanguageName,
   getCategoriesAndUpdateRedux,
+<<<<<<< HEAD
   setCombinedPhrases,
+=======
+  setCombinedPhrases
+>>>>>>> feat(Redux action): refactoring into asynchronous (#19)
 } from '../redux/actions';
 
 import {

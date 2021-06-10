@@ -67,6 +67,7 @@ export default ({
     const userPhrasesForCategory = newPhrases.filter(
       phrase => phrase.catId === categoryId,
     );
+
     setCombinedPhrases(userPhrasesForCategory, categoryId, navigateToLearn);
   };
 
