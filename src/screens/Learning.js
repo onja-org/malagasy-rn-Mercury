@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Text,
   View,
@@ -26,6 +26,8 @@ import {
   NEXT_BUTTON,
   RESHUFELE_BUTTON,
   ANSWER_VALIDATION,
+  CATEGORY_SEEN_PHRASES_HEADING,
+  CATEGORY_LEARNT_PHRASES_HEADING,
 } from '../translations';
 
 import List from '../components/List/List';
@@ -38,10 +40,10 @@ import BackIcon from '../components/ToolButton/assets/back.svg';
 import ModeIcon from '../components/ToolButton/assets/mode.svg';
 import LanguageSwitcherContainerEnMg from '../containers/LanguageSwitcherContainerEnMg';
 
-import {LANGUAGE_NAMES} from '../data/dataUtils';
-import {CATEGORY_LEARNT_PHRASES_HEADING} from '../translations';
+import { LANGUAGE_NAMES } from '../data/dataUtils';
+import { shuffleArray } from '../utils';
+import { LEARNT_PHRASE_ID, SEEN_PHRASE_ID } from '../redux/constants';
 
-import {shuffleArray} from '../utils';
 
 export default ({
   //nav provider
@@ -58,10 +60,9 @@ export default ({
   currentCategoryName,
   theme,
   setTheme,
+  currentCategoryId,
   nativeLanguage,
 }) => {
-  const categoryLearntPhrasesHeading =
-    LANG_DATA[CATEGORY_LEARNT_PHRASES_HEADING][nativeLanguage];
   const [originalPhrases, setOriginalPhrases] = useState([]);
   const [phrasesLeft, setPhrasesLeft] = useState([]);
   const [currentPhrase, setCurrentPhrase] = useState(null);
@@ -73,6 +74,7 @@ export default ({
   const learntCategory = categories.find(cat =>
     cat.phrasesIds.includes(currentPhrase?.id),
   );
+  const seenPhraseCategory = categories.find(id => id.phrasesIds.includes(currentPhrase?.id))
 
   useEffect(() => {
     setOriginalPhrases(categoryPhrases);
@@ -86,18 +88,9 @@ export default ({
     setAnswerOptions(randomWithCorrect);
   };
 
-  function seenPhraseCategory() {
-    const findCurrentCategory = categories.find(id =>
-      id.phrasesIds.includes(currentPhrase?.id),
-    );
-    const currentSeenPhraseCategory = findCurrentCategory?.name.en;
-    return currentSeenPhraseCategory;
-  }
-
   const selectAnswerCallback = useCallback(
     item => {
       const isCorrect = item.id === currentPhrase.id;
-
       const isAlredyinLearnPhrases = learntPhrases.every(
         phrase => phrase.id !== currentPhrase.id,
       );
@@ -117,7 +110,7 @@ export default ({
       }
       setDisableAllOptions(true);
       const answerOptionsWithSelected = answerOptions.map(phrase => {
-        return {...phrase, isSelected: phrase.id === item.id};
+        return { ...phrase, isSelected: phrase.id === item.id };
       });
       setAnswerOptions(answerOptionsWithSelected);
     },
@@ -161,21 +154,36 @@ export default ({
 
   const categoryHeading = LANG_DATA[CATEGORY_HEADING][nativeLanguage];
   const categorySubHeading = LANG_DATA[CATEGORY_SUB_HEADING][nativeLanguage];
-  const categoryListChoices =
-    LANG_DATA[CATEGORY_ANSWEAR_CHOICES][nativeLanguage];
-  const categoryHeadingListAnswear =
-    LANG_DATA[CATEGORY_SUB_HEADING_CHOICES][nativeLanguage];
+  const categoryListChoices = LANG_DATA[CATEGORY_ANSWEAR_CHOICES][nativeLanguage];
+  const categoryHeadingListAnswear = LANG_DATA[CATEGORY_SUB_HEADING_CHOICES][nativeLanguage];
   const nextButton = LANG_DATA[NEXT_BUTTON][nativeLanguage];
   const reshuffleButton = LANG_DATA[RESHUFELE_BUTTON][nativeLanguage];
   const answerValidation = LANG_DATA[ANSWER_VALIDATION][nativeLanguage];
+  const categoryLearntPhrasesHeading = LANG_DATA[CATEGORY_LEARNT_PHRASES_HEADING][nativeLanguage];
+  const categorySeenPhrasesHeading = LANG_DATA[CATEGORY_SEEN_PHRASES_HEADING][nativeLanguage];
+
+  const categoryHeadingPhrases = () => {
+    if (currentCategoryId === LEARNT_PHRASE_ID) {
+      return nativeLanguage === LANGUAGE_NAMES.MG
+        ? `${categoryLearntPhrasesHeading}/${learntCategory?.name[LANGUAGE_NAMES.MG]
+        }`
+        : `${categoryLearntPhrasesHeading}/${learntCategory?.name[LANGUAGE_NAMES.EN]
+        }`
+    } else if (currentCategoryId === SEEN_PHRASE_ID) {
+      return nativeLanguage === LANGUAGE_NAMES.MG ?
+        `${categorySeenPhrasesHeading}/${seenPhraseCategory?.name[LANGUAGE_NAMES.MG]}`
+        : `${categorySeenPhrasesHeading}/${seenPhraseCategory?.name[LANGUAGE_NAMES.EN]}`
+    }
+    return currentCategoryName
+  }
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{ flex: 1 }}>
       <KeyboardAvoidingView
-        style={{flex: 1}}
+        style={{ flex: 1 }}
         behavior="padding"
         style={getStyles(CONTAINER_STYLE, theme)}>
-        <View style={{paddingHorizontal: 35, paddingVertical: 23}}>
+        <View style={{ paddingHorizontal: 35, paddingVertical: 23 }}>
           <View style={getStyles(HEADER_STYLE, theme)}>
             <ToolBar
               button={
@@ -203,21 +211,13 @@ export default ({
           <View style={getStyles(HEADING_STYLE, theme)}>
             <SectionHeading text={categoryHeading} theme={theme} />
             <Text style={getStyles(SECTION_HEADING_TEXT_STYLE, theme)}>
-              {currentCategoryName
-                ? currentCategoryName
-                : nativeLanguage === LANGUAGE_NAMES.MG
-                ? `${categoryLearntPhrasesHeading}/${
-                    learntCategory?.name[LANGUAGE_NAMES.MG]
-                  }`
-                : `${categoryLearntPhrasesHeading}/${
-                    learntCategory?.name[LANGUAGE_NAMES.EN]
-                  }` || `Seen phrases - ${seenPhraseCategory()}`}
+              {categoryHeadingPhrases()}
             </Text>
           </View>
           <View style={getStyles(HEADING_STYLE, theme)}>
             <SectionHeading text={categorySubHeading} theme={theme} />
           </View>
-          <View style={{marginBottom: 37}}>
+          <View style={{ marginBottom: 37 }}>
             <Textarea
               theme={theme}
               editable={false}
@@ -225,8 +225,8 @@ export default ({
                 shouldReshuffle
                   ? answerValidation
                   : nativeLanguage === LANGUAGE_NAMES.MG
-                  ? currentPhrase?.name?.[LANGUAGE_NAMES.EN]
-                  : currentPhrase?.name?.[LANGUAGE_NAMES.MG]
+                    ? currentPhrase?.name?.[LANGUAGE_NAMES.EN]
+                    : currentPhrase?.name?.[LANGUAGE_NAMES.MG]
               }
             />
           </View>
@@ -253,7 +253,7 @@ export default ({
             </View>
           )}
           {disableAllOptions && !shouldReshuffle && (
-            <View style={{marginTop: 45}}>
+            <View style={{ marginTop: 45 }}>
               <NextButton
                 isDisabled={false}
                 textColor={getFillColor(theme)}
@@ -263,7 +263,7 @@ export default ({
             </View>
           )}
           {shouldReshuffle && (
-            <View style={{marginTop: 45}}>
+            <View style={{ marginTop: 45 }}>
               <NextButton
                 isDisabled={false}
                 textColor={getFillColor(theme)}

@@ -1,8 +1,7 @@
-
-import React, {useEffect} from 'react';
-import {action} from '@storybook/addon-actions';
-import {getPhrasesForCategoryId, getAllCategories} from '../data/dataUtils';
-import {View, SafeAreaView, KeyboardAvoidingView} from 'react-native';
+import React, { useEffect } from 'react';
+// import { action } from '@storybook/addon-actions';
+import { getPhrasesForCategoryId, getAllCategories } from '../data/dataUtils';
+import { View, SafeAreaView, KeyboardAvoidingView } from 'react-native';
 
 import {
   toggleTheme,
@@ -21,6 +20,10 @@ import {
   CATEGORY_SEEN_PHRASES_HEADING,
   CATEGORY_LEARNT_PHRASES_HEADING,
   CATEGORY_LEARNT_AND_SEEN_PHRASES,
+  CATEGORY_LEARNT_PHRASES,
+  SEEN_PHRASES_TRANSLATION,
+  SEEN_PHRASE_TRANSLATION,
+  CATEGORY_SEEN_PHRASES
 } from '../translations';
 
 import List from '../components/List/List';
@@ -31,19 +34,18 @@ import AddIcon from '../components/ToolButton/assets/add.svg';
 import CheckIcon from '../components/ToolButton/assets/check.svg';
 import CheckAllIcon from '../components/ToolButton/assets/check-all.svg';
 import ModeIcon from '../components/ToolButton/assets/mode.svg';
-import LanguageSwitcherContainerEnMg from '../containers/LanguageSwitcherContainerEnMg'
+import LanguageSwitcherContainerEnMg from '../containers/LanguageSwitcherContainerEnMg';
+import { LEARNT_PHRASE_ID, SEEN_PHRASE_ID } from '../redux/constants';
 
 export default ({
   //nav provider
   navigation,
-
   //state props
   categories,
   learntPhrases,
   nativeLanguage,
   newPhrases,
   theme,
-
   //actions
   setCurrentCategory,
   setPhrases,
@@ -75,15 +77,13 @@ export default ({
 
   const categoryHeading = LANG_DATA[CATEGORY_HEADING][nativeLanguage];
   const categoryList = LANG_DATA[CATEGORY_LIST][nativeLanguage];
-  const categorySeenPhrasesHeading =
-    LANG_DATA[CATEGORY_SEEN_PHRASES_HEADING][nativeLanguage];
-
-  const categoryLearntPhrasesHeading =
-    LANG_DATA[CATEGORY_LEARNT_PHRASES_HEADING][nativeLanguage];
-  const categoryLearntAndSeenPhrases =
-    LANG_DATA[CATEGORY_LEARNT_AND_SEEN_PHRASES][nativeLanguage];
-
   const noWordAndPhraseText = LANG_DATA[NO_PHRASE_TEXT][nativeLanguage];
+  const categorySeenPhrasesHeading = LANG_DATA[CATEGORY_SEEN_PHRASES_HEADING][nativeLanguage];
+  const categorySeenPhrases = LANG_DATA[CATEGORY_SEEN_PHRASES][nativeLanguage];
+  const categoryLearntPhrasesHeading = LANG_DATA[CATEGORY_LEARNT_PHRASES_HEADING][nativeLanguage];
+  const categoryLearntPhrases = LANG_DATA[CATEGORY_LEARNT_PHRASES][nativeLanguage];
+  const seenPhrasesTranslation = LANG_DATA[SEEN_PHRASES_TRANSLATION][nativeLanguage]
+  const seenPhraseTranslation = LANG_DATA[SEEN_PHRASE_TRANSLATION][nativeLanguage]
 
   const openAddingScreen = () => {
     navigation.navigate('Add');
@@ -112,7 +112,7 @@ export default ({
     wordAndPhrase = noWordAndPhraseText;
   }
 
-  const openSeenPhrase = item => {
+  const openSeenPhrase = (item) => {
     setCurrentCategory(item.id);
     setPhrases(seenPhrases);
     navigation.navigate('Learn');
@@ -120,20 +120,20 @@ export default ({
   let wordNumberSeenPhrases = '';
 
   if (seenPhrases?.length > 1) {
-    wordNumberSeenPhrases = `${seenPhrases?.length} words and phrases`;
+    wordNumberSeenPhrases = `${seenPhrases?.length} ${categorySeenPhrases}`
   } else if (seenPhrases?.length === 1) {
-    wordNumberSeenPhrases = `${seenPhrases?.length} word and phrase`;
+    wordNumberSeenPhrases = `${seenPhrases?.length} ${seenPhraseTranslation}`
   } else {
-    wordNumberSeenPhrases = `No word and phrase`;
+    wordNumberSeenPhrases = `${seenPhrasesTranslation}`
   }
 
   return (
     <SafeAreaView>
       <KeyboardAvoidingView
-        style={{flex: 1}}
+        style={{ flex: 1 }}
         behavior="padding"
         style={getStyles(CONTAINER_STYLE, theme)}>
-        <View style={{paddingHorizontal: 35, paddingVertical: 23}}>
+        <View style={{ paddingHorizontal: 35, paddingVertical: 23 }}>
           <View style={getStyles(HEADER_STYLE, theme)}>
             <ToolBar
               button={
@@ -149,7 +149,9 @@ export default ({
             />
             <ToolBar
               button={
-                <ToolButton onPress={action('clicked-add-button')}>
+                <ToolButton
+                  onPress={() => openSeenPhrase({ id: SEEN_PHRASE_ID })}
+                  disabled={seenPhrases?.length === 0}>
                   <CheckIcon
                     width={24}
                     height={24}
@@ -196,7 +198,7 @@ export default ({
             <SectionHeading text={categorySeenPhrasesHeading} theme={theme} />
           </View>
           <List
-            data={[{id: '###seen-phrases###', name: wordNumberSeenPhrases}]}
+            data={[{ id: SEEN_PHRASE_ID, name: wordNumberSeenPhrases }]}
             text={'Learn'}
             color="#06B6D4"
             iconType="material-community"
@@ -209,12 +211,12 @@ export default ({
             <SectionHeading text={categoryLearntPhrasesHeading} theme={theme} />
           </View>
           <List
-            data={[{id: '###learnt-phrases###', name: wordAndPhrase}]}
+            data={[{ id: LEARNT_PHRASE_ID, name: wordAndPhrase }]}
             text={categoryList}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"
-            disableAllOptions={learntPhrases?.length === 0}
+            disableAllOptions={learntPhrases === 0}
             makeAction={openLearntPhrases}
             theme={theme}
           />
