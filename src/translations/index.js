@@ -1,4 +1,4 @@
-import {LANGUAGE_NAMES} from '../data/dataUtils';
+import { LANGUAGE_NAMES } from '../data/dataUtils';
 
 export const CATEGORY_HEADING = 'CATEGORY_HEADING';
 export const CATEGORY_LIST = 'CATEGORY_LIST';
@@ -21,6 +21,9 @@ export const ANSWER_VALIDATION = 'ANSWER_VALIDATION';
 export const NO_PHRASE_TEXT = 'NO_PHRASE_TEXT';
 export const SELECTED_CATEGORY_HEADING = 'SELECTED_CATEGORY_HEADING';
 export const CLOSE_BUTTON_TEXT = 'CLOSE_BUTTON';
+export const SEEN_PHRASES_TRANSLATION = "SEEN_PHRASES_TRANSLATION"
+export const SEEN_PHRASE_TRANSLATION = "SEEN_PHRASE_TRANSLATION"
+export const CATEGORY_LEARNT_PHRASES = 'CATEGORY_LEARNT_PHRASES'
 
 export const LANG_DATA = {
   [CATEGORY_HEADING]: {
@@ -36,8 +39,8 @@ export const LANG_DATA = {
     [LANGUAGE_NAMES.MG]: 'Ireo fehezan-teny efa hita:',
   },
   [CATEGORY_SEEN_PHRASES]: {
-    [LANGUAGE_NAMES.EN]: '35 words and phrases',
-    [LANGUAGE_NAMES.MG]: 'Fehezan-teny 35',
+    [LANGUAGE_NAMES.EN]: 'words and phrases',
+    [LANGUAGE_NAMES.MG]: 'Fehezan-teny',
   },
   [CATEGORY_LEARNT_PHRASES_HEADING]: {
     [LANGUAGE_NAMES.EN]: 'Learnt phrases',
@@ -50,6 +53,11 @@ export const LANG_DATA = {
   [NO_PHRASE_TEXT]: {
     [LANGUAGE_NAMES.EN]: 'No word and phrase',
     [LANGUAGE_NAMES.MG]: 'Tsy misy fehezan-teny',
+
+  },
+  [CATEGORY_LEARNT_PHRASES]: {
+    [LANGUAGE_NAMES.EN]: 'words and phrases',
+    [LANGUAGE_NAMES.MG]: 'Fehezan-teny ',
   },
   [CATEGORY_SUB_HEADING]: {
     [LANGUAGE_NAMES.EN]: 'The phrase:',
@@ -103,6 +111,14 @@ export const LANG_DATA = {
   [CLOSE_BUTTON_TEXT]: {
     [LANGUAGE_NAMES.EN]: 'Close',
     [LANGUAGE_NAMES.MG]: 'Akatony',
-
+  },
+  [SEEN_PHRASES_TRANSLATION]: {
+    [LANGUAGE_NAMES.EN]: 'No word and phrase',
+    [LANGUAGE_NAMES.MG]: "Tsy misy teny sy fehezan-teny",
+  },
+  [SEEN_PHRASE_TRANSLATION]: {
+    [LANGUAGE_NAMES.EN]: 'word and phrase',
+    [LANGUAGE_NAMES.MG]: "teny sy fehezan-teny",
   }
 };
+

@@ -17,7 +17,7 @@ import {
   SEEN_PHRASES_KEY,
   getData,
 } from '../../utils/storage';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 // categories actions
 export function setCategories(categories) {
@@ -170,21 +170,6 @@ export function getCategoriesAndUpdateRedux() {
 }
 
 
-export function setCombinedPhrases(
-  userPhrasesForCategory,
-  categoryId,
-  navigateToLearn,
-) {
-
-export function getCategoriesAndUpdateRedux() {
-  return async dispatch => {
-    const categories = await getAllCategories();
-    dispatch(setCategories(categories));
-    return Promise.resolve();
-  }
-
-}
-  
 export function setCombinedPhrases(userPhrasesForCategory, categoryId, navigateToLearn) {
   return async dispatch => {
     const phrasesForCategory = await getPhrasesForCategoryId(categoryId);
@@ -199,4 +184,5 @@ export function setCombinedPhrases(userPhrasesForCategory, categoryId, navigateT
   }
 
 }
+
 
