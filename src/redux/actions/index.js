@@ -17,6 +17,7 @@ import {
   SEEN_PHRASES_KEY,
   getData,
 } from '../../utils/storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // categories actions
 export function setCategories(categories) {
