@@ -2,13 +2,26 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {TouchableHighlight, StyleSheet, View} from 'react-native';
 
-export default function ToolButton({onPress, children}) {
+import {
+  getStyles,
+  LIGHT_THEME,
+  TOOL_BUTTON_CONTAINER_STYLE,
+  TOOL_BUTTON_STYLE,
+} from '../../ThemeColor/ThemeColor';
+
+export default function ToolButton({
+  onPress,
+  children,
+  theme = LIGHT_THEME,
+  disabled,
+}) {
   return (
     <TouchableHighlight
-      style={styles.container}
+      style={getStyles(TOOL_BUTTON_CONTAINER_STYLE, theme)}
       underlayColor="#E5E5E5"
-      onPress={onPress}>
-      <View style={styles.button}>{children}</View>
+      onPress={onPress}
+      disabled={disabled}>
+      <View style={getStyles(TOOL_BUTTON_STYLE, theme)}>{children}</View>
     </TouchableHighlight>
   );
 }
@@ -22,21 +35,3 @@ ToolButton.propTypes = {
   children: PropTypes.node,
   onPress: PropTypes.func,
 };
-
-const styles = StyleSheet.create({
-  container: {
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: '600',
-    fontSize: 16,
-    color: '#FFFFFF',
-    width: 'auto',
-    alignSelf: 'center',
-    borderRadius: 100,
-    backgroundColor: '#06B6D4',
-    alignItems: 'center',
-  },
-  button: {
-    margin: 13,
-  },
-});

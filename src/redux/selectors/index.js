@@ -1,10 +1,13 @@
-import {createSelector} from 'reselect';
+import { createSelector } from 'reselect';
 
 export const categoriesRoot = state => state.categories;
 export const nativeLanguageRoot = state => state.nativeLanguage;
+export const themeRoot = state => state.theme;
+export const newPhrasesRoot = state => state.newPhrases;
 export const categoryPhrasesRoot = state => {
   return state.categoryPhrases;
 };
+export const seenPhrasesRoot = state => state.seenPhrases;
 export const randomPhrase = state => state.randomPhrase;
 export const currentCategoryIdRoot = state => state.currentCategoryId;
 
@@ -30,3 +33,5 @@ export const currentCategoryName = createSelector(
     return name;
   },
 );
+export const learntPhrasesRoot = state => state.learntPhrases;
+export const learntPhrasesCategoryRoot = state => state.learntPhrasesCategory;

@@ -1,46 +1,39 @@
 // components/Task.js
 import * as React from 'react';
-import { SafeAreaView, View, StyleSheet,TextInput } from 'react-native';
-// import { styles } from '../constants/globalStyles';
+import { SafeAreaView, TextInput } from 'react-native';
+import {
+  getStyles,
+  LIGHT_THEME,
+  INPUT_STYLE,
+  TEXTAREA_STYLE,
+  TEXT_TEXTAREA_CONTAINER_STYLE,
+} from '../../ThemeColor/ThemeColor';
 
-export default function Example({phrase,editable,onChange = () => null, placeholder}) {
+export default function Example({
+  phrase,
+  editable,
+  onChange = () => null, 
+  placeholder,
+  theme
+}) {
+
+  const textStyle = editable 
+    ? getStyles(INPUT_STYLE, theme)
+    : getStyles(TEXTAREA_STYLE, theme);
+
+  const placeholderStyle = theme === LIGHT_THEME ? '#11182780' : '#ffffff';
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={getStyles(TEXT_TEXTAREA_CONTAINER_STYLE, theme)}>
       <TextInput
-        style={editable ? styles.input : styles.textarea}
+        style={theme === LIGHT_THEME ? textStyle : {color: '#ffffff'}}
         value={phrase}
         editable={editable}
         onChangeText={onChange}
         multiline={true}
         placeholder={placeholder}
+        placeholderTextColor={placeholderStyle}
       />
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-    container: {
-    height: 100,
-    marginVertical: 0,
-    marginHorizontal: 'auto',
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderStyle: 'solid',
-    borderColor: '#E5E5E5',
-    borderWidth: 1,
-  },
-  input: {
-    color: '#111827',
-    lineHeight: 24.3,
-  },
-  textarea: {
-    color: '#111827',
-    maxWidth: 360,
-    marginHorizontal: 'auto',
-    fontSize: 20,
-    lineHeight: 24.3,
-  },
-
-})
