@@ -1,4 +1,4 @@
-# Learn-gasy - mobile application that helps to learn Malagasy or English
+# Learn-gasy - mobile application to help people learn Malagasy or English
 
 ## Features:
    - Around 1000 phrases divided into 42 categories.
