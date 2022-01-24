@@ -13,8 +13,8 @@
 
 ## Technology/libraries used:
    - React Native
-   - Running / testing app in simulator environment (Android studio)
-   - storybook 
+   - Android Studio
+   - Storybook 
    - Screen navigation
    - Redux
    - Redux thunk
